@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iOS SDK — MAIG Docs</title>
+  <meta name="description" content="Integrate the MAIG Swift SDK into your iOS app using Swift Package Manager. Generate text, stream responses, and handle errors." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refunds</a>
+      <a href="contact.html">Contact</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="doc-breadcrumb">
+      <a href="docs.html">Docs</a>
+      <span>/</span>
+      iOS SDK
+    </div>
+
+    <div class="page-header">
+      <h1>iOS SDK</h1>
+      <p class="updated">Swift &middot; iOS 16+ &middot; Swift Package Manager</p>
+    </div>
+
+    <p>The MAIG Swift SDK provides a native async/await interface for generating text and streaming responses from any AI model configured in your project. Requests are authenticated with your project API key and routed through MAIG's gateway — your provider credentials never leave the server.</p>
+
+    <div class="legal-section">
+      <h2>Requirements</h2>
+      <ul>
+        <li>iOS 16.0 or later</li>
+        <li>Swift 5.7 or later (Xcode 14+)</li>
+        <li>A MAIG project API key — see the <a href="dashboard-setup.html">Dashboard Setup guide</a></li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>Installation</h2>
+      <h3>Swift Package Manager</h3>
+      <p>In Xcode, go to <strong>File &rarr; Add Package Dependencies</strong> and enter the repository URL:</p>
+      <pre data-lang="text"><code>https://github.com/your-org/AIGatewaySDK</code></pre>
+      <p>Select the <code>AIGatewaySDK</code> package and add it to your app target. Then import the module wherever you need it:</p>
+      <pre data-lang="swift"><code>import AIGatewaySDK</code></pre>
+      <p>Alternatively, add it as a dependency in your own <code>Package.swift</code>:</p>
+      <pre data-lang="swift"><code>dependencies: [
+    .package(url: "https://github.com/your-org/AIGatewaySDK", branch: "main")
+]</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Initialization</h2>
+      <p>Create one shared <code>AIGatewayClient</code> instance — typically at the app level or in a dedicated service class:</p>
+      <pre data-lang="swift"><code>import AIGatewaySDK
+
+let client = AIGatewayClient(
+    apiKey: "maig_YOUR_PROJECT_KEY",
+    baseURL: URL(string: "https://api.maig.dev")!
+)</code></pre>
+      <div class="doc-note">
+        <strong>Security:</strong> Do not hard-code your API key in source files committed to a public repository. Inject it at launch from an environment-specific configuration file, a <code>.xcconfig</code>, or a secrets manager.
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Generating text</h2>
+      <p>Use <code>generateText</code> to make a single round-trip request and receive the complete response as a <code>String</code>:</p>
+      <pre data-lang="swift"><code>let response = try await client.generateText(
+    prompt: "Summarize WWDC 2025 in three sentences.",
+    options: nil
+)
+print(response)</code></pre>
+
+      <h3>GenerateOptions</h3>
+      <p>Pass a <code>GenerateOptions</code> value to customize the request:</p>
+      <pre data-lang="swift"><code>let options = GenerateOptions(
+    model: "claude-3-5-sonnet-20241022", // override the route's default model
+    userId: currentUser.id,              // optional: appears in dashboard logs
+    maxTokens: 512
+)
+
+let response = try await client.generateText(
+    prompt: "Write a short product description for an AI routing SDK.",
+    options: options
+)</code></pre>
+      <p>If <code>model</code> is <code>nil</code>, MAIG uses the primary model configured in your project's routing rule.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Streaming text</h2>
+      <p>Use <code>streamText</code> to receive tokens as they are generated. The method returns an <code>AsyncSequence</code> of <code>String</code> tokens:</p>
+      <pre data-lang="swift"><code>var output = ""
+
+for try await token in client.streamText(prompt: "Tell me a story about a robot.") {
+    output += token
+    await MainActor.run { label.text = output }
+}</code></pre>
+      <p>Streaming uses Server-Sent Events (SSE) under the hood, parsed incrementally over a URLSession byte stream. It works with both SwiftUI and UIKit.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Error handling</h2>
+      <p>Both <code>generateText</code> and <code>streamText</code> throw <code>AIGatewayError</code>. Handle the cases your app cares about:</p>
+      <pre data-lang="swift"><code>do {
+    let response = try await client.generateText(prompt: userInput, options: nil)
+    display(response)
+} catch AIGatewayError.authFailure {
+    // Invalid or expired API key
+    showAlert("Authentication failed. Check your API key in Settings.")
+} catch AIGatewayError.networkError(let underlying) {
+    // Device is offline or connection was lost mid-stream
+    showAlert("Network error: \(underlying.localizedDescription)")
+} catch AIGatewayError.serverError(let statusCode, let message) {
+    // Gateway or upstream provider returned a non-2xx response
+    print("Server error \(statusCode): \(message ?? "unknown")")
+} catch {
+    print("Unexpected error: \(error)")
+}</code></pre>
+
+      <h3>Error cases</h3>
+      <ul>
+        <li><code>authFailure</code> — the project API key is missing, malformed, or revoked</li>
+        <li><code>networkError(Error)</code> — transport-level failure; the associated value is the underlying <code>URLError</code></li>
+        <li><code>serverError(Int, String?)</code> — the gateway responded with a non-2xx HTTP status; includes the status code and an optional message string</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>Next steps</h2>
+      <ul>
+        <li>Configure fallback routing in the <a href="dashboard-setup.html">dashboard</a> to improve resilience when a provider is unavailable</li>
+        <li>View per-request logs, token counts, and latency in the dashboard's <strong>Logs</strong> tab</li>
+        <li>Questions? Email <a href="mailto:support@maig.dev">support@maig.dev</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="docs.html">Docs</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+</body>
+</html>

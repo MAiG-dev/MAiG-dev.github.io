@@ -228,4 +228,126 @@ footer {
   .features { grid-template-columns: 1fr; }
   .hero h1 { font-size: 2rem; }
   footer { flex-direction: column; align-items: flex-start; }
+  .doc-cards { grid-template-columns: 1fr; }
 }
+
+/* ── Docs ── */
+code {
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+  font-size: 0.875em;
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+  color: var(--accent-light);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 1rem 0 1.5rem;
+}
+
+pre[data-lang]::before {
+  content: attr(data-lang);
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+pre code {
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 0;
+  border-radius: 0;
+  line-height: 1.7;
+}
+
+.doc-steps {
+  counter-reset: doc-step;
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 2rem;
+}
+
+.doc-steps li {
+  counter-increment: doc-step;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.doc-steps li::before {
+  content: counter(doc-step);
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--accent-light);
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+
+.doc-steps li .step-body { flex: 1; }
+.doc-steps li .step-body h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--text); }
+.doc-steps li .step-body p { margin-bottom: 0.6rem; }
+
+.doc-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.doc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.15s;
+}
+
+.doc-card:hover { border-color: var(--accent); text-decoration: none; }
+.doc-card-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+.doc-card h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--text); }
+.doc-card p { font-size: 0.85rem; margin: 0; }
+
+.doc-note {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.doc-note strong { color: var(--accent-light); }
+
+.doc-breadcrumb {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.doc-breadcrumb a { color: var(--muted); }
+.doc-breadcrumb a:hover { color: var(--text); }
