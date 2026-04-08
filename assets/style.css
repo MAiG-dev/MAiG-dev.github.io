@@ -314,7 +314,7 @@ pre code {
   margin: 1.25rem 0 2rem;
 }
 
-.doc-steps li {
+.doc-steps > li {
   counter-increment: doc-step;
   display: flex;
   gap: 1rem;
@@ -322,7 +322,7 @@ pre code {
   margin-bottom: 2rem;
 }
 
-.doc-steps li::before {
+.doc-steps > li::before {
   content: counter(doc-step);
   flex-shrink: 0;
   width: 28px;
@@ -339,9 +339,9 @@ pre code {
   margin-top: 0.1rem;
 }
 
-.doc-steps li .step-body { flex: 1; }
-.doc-steps li .step-body h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--text); }
-.doc-steps li .step-body p { margin-bottom: 0.6rem; }
+.doc-steps > li .step-body { flex: 1; }
+.doc-steps > li .step-body h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--text); }
+.doc-steps > li .step-body p { margin-bottom: 0.6rem; }
 
 .doc-cards {
   display: grid;
