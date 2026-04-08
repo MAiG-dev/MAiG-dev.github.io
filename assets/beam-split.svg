@@ -1,104 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" style="cursor:crosshair">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" style="cursor:crosshair">
   <defs>
-    <radialGradient id="bgGlow" cx="57%" cy="50%" r="45%">
-      <stop offset="0%" stop-color="#0a1a3a"/>
-      <stop offset="100%" stop-color="#020810"/>
-    </radialGradient>
-
-    <!-- Line glow — large absolute bounds so lines never clip when endpoints move -->
-    <filter id="glow" filterUnits="userSpaceOnUse" x="-30" y="-30" width="660" height="660">
+    <!-- Line glow — covers full canvas -->
+    <filter id="glow" filterUnits="userSpaceOnUse" x="-30" y="-30" width="1260" height="560">
       <feGaussianBlur stdDeviation="3" result="b1"/>
       <feGaussianBlur stdDeviation="6" result="b2"/>
       <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
-    <!-- Center burst glow — big region, layered blur for bloom -->
-    <filter id="centerGlow" filterUnits="userSpaceOnUse" x="162" y="120" width="360" height="360">
+    <!-- Center burst bloom -->
+    <filter id="centerGlow" filterUnits="userSpaceOnUse" x="450" y="0" width="600" height="500">
       <feGaussianBlur stdDeviation="6"  result="b1"/>
       <feGaussianBlur stdDeviation="14" result="b2"/>
       <feGaussianBlur stdDeviation="28" result="b3"/>
       <feMerge><feMergeNode in="b3"/><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
-    <!-- Outer halo — very soft, wide spread -->
-    <filter id="haloFilter" filterUnits="userSpaceOnUse" x="42" y="0" width="600" height="600">
+    <!-- Wide halo around center -->
+    <filter id="haloFilter" filterUnits="userSpaceOnUse" x="370" y="-100" width="900" height="700">
       <feGaussianBlur stdDeviation="22" result="b1"/>
       <feGaussianBlur stdDeviation="45" result="b2"/>
       <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
-    <filter id="beamGlow" x="-5%" y="-500%" width="110%" height="1100%">
+    <!-- Beam glow -->
+    <filter id="beamGlow" filterUnits="userSpaceOnUse" x="-10" y="215" width="790" height="70">
       <feGaussianBlur stdDeviation="2"  result="b1"/>
       <feGaussianBlur stdDeviation="5"  result="b2"/>
       <feGaussianBlur stdDeviation="10" result="b3"/>
       <feMerge><feMergeNode in="b3"/><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
-    <filter id="dotGlow" filterUnits="userSpaceOnUse" x="-30" y="-30" width="660" height="660">
+    <!-- Dot glow — covers full canvas -->
+    <filter id="dotGlow" filterUnits="userSpaceOnUse" x="-30" y="-30" width="1260" height="560">
       <feGaussianBlur stdDeviation="3" result="b1"/>
       <feGaussianBlur stdDeviation="6" result="b2"/>
       <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
+    <!-- Beam gradient: transparent left → white at center (x=750) -->
     <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%"   stop-color="#0044aa" stop-opacity="0"/>
-      <stop offset="30%"  stop-color="#1a6fff" stop-opacity="0.6"/>
-      <stop offset="85%"  stop-color="#55aaff" stop-opacity="0.9"/>
+      <stop offset="40%"  stop-color="#1a6fff" stop-opacity="0.6"/>
+      <stop offset="88%"  stop-color="#55aaff" stop-opacity="0.9"/>
       <stop offset="100%" stop-color="#ffffff"  stop-opacity="1"/>
     </linearGradient>
   </defs>
 
+  <!-- Center: (750, 250) — 62.5% from left, vertically centered -->
+
   <!-- Outer halo — breathes via JS -->
-  <circle id="haloOuter" cx="342" cy="300" r="110" fill="#0033aa" opacity="0.06" filter="url(#haloFilter)"/>
-  <circle id="haloInner" cx="342" cy="300" r="58"  fill="#1155dd" opacity="0.09" filter="url(#haloFilter)"/>
+  <circle id="haloOuter" cx="750" cy="250" r="110" fill="#0033aa" opacity="0.06" filter="url(#haloFilter)"/>
+  <circle id="haloInner" cx="750" cy="250" r="58"  fill="#1155dd" opacity="0.09" filter="url(#haloFilter)"/>
 
-  <!-- Incoming beam -->
-  <rect x="0" y="298.5" width="342" height="3" fill="url(#beamGrad)" filter="url(#beamGlow)"/>
-  <rect x="60" y="299.5" width="282" height="1" fill="#aaddff" opacity="0.9" filter="url(#beamGlow)"/>
+  <!-- Incoming beam: x=0 → center (750) -->
+  <rect x="0" y="248.5" width="750" height="3" fill="url(#beamGrad)" filter="url(#beamGlow)"/>
+  <rect x="60" y="249.5" width="690" height="1" fill="#aaddff" opacity="0.9" filter="url(#beamGlow)"/>
 
-  <!-- Ray lines — irregular angles and lengths, all pointing right -->
-  <!-- Angles (from horiz): -79°, -63°, -51°, -28°, -8°, +17°, +26°, +45°, +63°, +78° -->
-  <!-- Lengths: 148, 218, 172, 245, 190, 228, 195, 158, 225, 152 -->
-  <line id="line0" x1="342" y1="300" x2="370" y2="155" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line1" x1="342" y1="300" x2="441" y2="106" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line2" x1="342" y1="300" x2="450" y2="166" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line3" x1="342" y1="300" x2="558" y2="185" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line4" x1="342" y1="300" x2="530" y2="274" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line5" x1="342" y1="300" x2="560" y2="367" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line6" x1="342" y1="300" x2="517" y2="386" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line7" x1="342" y1="300" x2="454" y2="412" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line8" x1="342" y1="300" x2="444" y2="501" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
-  <line id="line9" x1="342" y1="300" x2="374" y2="449" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <!-- Rays — irregular angles and lengths, all pointing right -->
+  <line id="line0" x1="750" y1="250" x2="778" y2="105" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line1" x1="750" y1="250" x2="849" y2="56"  stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line2" x1="750" y1="250" x2="858" y2="116" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line3" x1="750" y1="250" x2="966" y2="135" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line4" x1="750" y1="250" x2="938" y2="224" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line5" x1="750" y1="250" x2="968" y2="317" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line6" x1="750" y1="250" x2="925" y2="336" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line7" x1="750" y1="250" x2="862" y2="362" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line8" x1="750" y1="250" x2="852" y2="451" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
+  <line id="line9" x1="750" y1="250" x2="782" y2="399" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#glow)"/>
 
   <!-- Endpoint dots -->
-  <circle id="dot0" cx="370" cy="155" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot1" cx="441" cy="106" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot2" cx="450" cy="166" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot3" cx="558" cy="185" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot4" cx="530" cy="274" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot5" cx="560" cy="367" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot6" cx="517" cy="386" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot7" cx="454" cy="412" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot8" cx="444" cy="501" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
-  <circle id="dot9" cx="374" cy="449" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot0" cx="778" cy="105" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot1" cx="849" cy="56"  r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot2" cx="858" cy="116" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot3" cx="966" cy="135" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot4" cx="938" cy="224" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot5" cx="968" cy="317" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot6" cx="925" cy="336" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot7" cx="862" cy="362" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot8" cx="852" cy="451" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
+  <circle id="dot9" cx="782" cy="399" r="3.5" fill="#88ccff" filter="url(#dotGlow)"/>
 
-  <!-- Center burst — layered for bloom, animated via JS -->
-  <circle id="burst3" cx="342" cy="300" r="26"  fill="#0d3acc" opacity="0.28" filter="url(#centerGlow)"/>
-  <circle id="burst2" cx="342" cy="300" r="14"  fill="#2255ee" opacity="0.55" filter="url(#centerGlow)"/>
-  <circle id="burst1" cx="342" cy="300" r="6"   fill="#55aaff" opacity="0.90" filter="url(#centerGlow)"/>
-  <circle              cx="342" cy="300" r="2.5" fill="#cce8ff" opacity="1"/>
-  <circle              cx="342" cy="300" r="1"   fill="#ffffff"  opacity="1"/>
+  <!-- Center burst — layered bloom, animated via JS -->
+  <circle id="burst3" cx="750" cy="250" r="26"  fill="#0d3acc" opacity="0.28" filter="url(#centerGlow)"/>
+  <circle id="burst2" cx="750" cy="250" r="14"  fill="#2255ee" opacity="0.55" filter="url(#centerGlow)"/>
+  <circle id="burst1" cx="750" cy="250" r="6"   fill="#55aaff" opacity="0.90" filter="url(#centerGlow)"/>
+  <circle              cx="750" cy="250" r="2.5" fill="#cce8ff" opacity="1"/>
+  <circle              cx="750" cy="250" r="1"   fill="#ffffff"  opacity="1"/>
 
   <script type="text/javascript"><![CDATA[
   (function () {
-    var CX = 342, CY = 300;
+    var CX = 750, CY = 250;
 
-    // Irregular angles (deg) and distances — intentionally uneven spacing and length
-    // Angles: -79, -63, -51, -28, -8, +17, +26, +45, +63, +78
-    // Lengths: 148, 218, 172, 245, 190, 228, 195, 158, 225, 152
     var endpointDefs = [
-      [370, 155], [441, 106], [450, 166], [558, 185], [530, 274],
-      [560, 367], [517, 386], [454, 412], [444, 501], [374, 449]
+      [778, 105], [849, 56],  [858, 116], [966, 135], [938, 224],
+      [968, 317], [925, 336], [862, 362], [852, 451], [782, 399]
     ];
 
     var rays = endpointDefs.map(function (ep, i) {
@@ -106,22 +101,19 @@
       return {
         angle:    Math.atan2(dy, dx),
         baseDist: Math.sqrt(dx * dx + dy * dy),
-        // Stagger phases so rays don't all pulse in sync
-        phase: (i / endpointDefs.length) * Math.PI * 2
+        phase:    (i / endpointDefs.length) * Math.PI * 2
       };
     });
 
     var lines = rays.map(function (_, i) { return document.getElementById('line' + i); });
     var dots  = rays.map(function (_, i) { return document.getElementById('dot'  + i); });
 
-    // Center glow elements
     var haloOuter = document.getElementById('haloOuter');
     var haloInner = document.getElementById('haloInner');
     var burst1    = document.getElementById('burst1');
     var burst2    = document.getElementById('burst2');
     var burst3    = document.getElementById('burst3');
 
-    // Smoothed current positions
     var pos = rays.map(function (r) {
       return { x: CX + r.baseDist * Math.cos(r.angle),
                y: CY + r.baseDist * Math.sin(r.angle) };
@@ -129,10 +121,9 @@
 
     var mouseX = null, mouseY = null;
 
-    // --- Tuning ---
-    var PULSE_PERIOD   = 10.0;  // seconds per full in/out cycle
-    var PULSE_AMP      = 0.18;  // ±18% of base distance
-    var GLOW_PERIOD    = 5.0;   // center glow breathe cycle (different freq feels alive)
+    var PULSE_PERIOD   = 10.0;
+    var PULSE_AMP      = 0.18;
+    var GLOW_PERIOD    = 5.0;
     var ATTRACT_RADIUS = 170;
     var ATTRACT_POWER  = 0.65;
     var LERP_NORMAL    = 1.5;
@@ -141,8 +132,8 @@
     var svg = document.querySelector('svg');
     svg.addEventListener('mousemove', function (e) {
       var r = svg.getBoundingClientRect();
-      mouseX = (e.clientX - r.left) * (600 / r.width);
-      mouseY = (e.clientY - r.top)  * (600 / r.height);
+      mouseX = (e.clientX - r.left) * (1200 / r.width);
+      mouseY = (e.clientY - r.top)  * (500  / r.height);
     });
     svg.addEventListener('mouseleave', function () { mouseX = null; mouseY = null; });
 
@@ -154,7 +145,6 @@
       lastTs = ts;
       elapsed += dt;
 
-      // --- Center glow pulse (slow breathe, offset phase from rays) ---
       var glowT = 0.5 + 0.5 * Math.sin((elapsed / GLOW_PERIOD) * Math.PI * 2 + 1.2);
       haloOuter.setAttribute('opacity', 0.04 + 0.05 * glowT);
       haloInner.setAttribute('opacity', 0.07 + 0.08 * glowT);
@@ -162,10 +152,8 @@
       burst2.setAttribute('opacity',    0.45 + 0.25 * glowT);
       burst1.setAttribute('opacity',    0.80 + 0.18 * glowT);
 
-      // --- Ray pulse ---
       var angFreq = (2 * Math.PI) / PULSE_PERIOD;
 
-      // Find closest dot to cursor
       var closestIdx = -1, closestDist = Infinity;
       if (mouseX !== null) {
         for (var i = 0; i < rays.length; i++) {

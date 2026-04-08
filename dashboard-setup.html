@@ -79,10 +79,11 @@
             <h3>Configure a routing rule</h3>
             <p>Open the <strong>Routing</strong> tab. Click <strong>Add route</strong> and configure:</p>
             <ul>
-              <li><strong>Primary model</strong> — the model MAIG will use by default (e.g. <code>gpt-4o</code> or <code>claude-3-5-sonnet-20241022</code>)</li>
+              <li><strong>Route name</strong> — a short identifier you choose (e.g. <code>chat</code>, <code>summarizer</code>, <code>fast</code>). Your app passes this name as the <code>model</code> field in requests to target this route directly.</li>
+              <li><strong>Primary model</strong> — the AI model MAIG will use (e.g. <code>gpt-4o</code> or <code>claude-3-5-sonnet-20241022</code>)</li>
               <li><strong>Fallback model</strong> (optional) — the model to try if the primary provider returns an error or times out</li>
             </ul>
-            <p>Routes are evaluated in order. The first matching route handles each request.</p>
+            <p>Naming routes lets you decouple your app code from specific model names. You can swap the underlying model in the dashboard at any time without releasing an app update.</p>
           </div>
         </li>
 
@@ -101,8 +102,18 @@
 
     <div class="legal-section">
       <h2>Making requests directly</h2>
-      <p>Once your project is configured you can route requests to MAIG's OpenAI-compatible endpoint from any HTTP client:</p>
-      <pre data-lang="shell"><code>curl https://api.maig.dev/v1/chat/completions \
+      <p>Once your project is configured you can route requests to MAIG's OpenAI-compatible endpoint from any HTTP client. Pass your route name as the <code>model</code> field to target that route, or pass a literal model name to bypass routing:</p>
+      <pre data-lang="shell"><code># Using a named route
+curl https://api.maig.dev/v1/chat/completions \
+  -H "Authorization: Bearer maig_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "chat",
+    "messages": [{ "role": "user", "content": "Hello!" }]
+  }'
+
+# Using a literal model name
+curl https://api.maig.dev/v1/chat/completions \
   -H "Authorization: Bearer maig_YOUR_KEY" \
   -H "Content-Type: application/json" \
   -d '{

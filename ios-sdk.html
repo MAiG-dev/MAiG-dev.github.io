@@ -79,11 +79,22 @@ let client = AIGatewayClient(
 )
 print(response)</code></pre>
 
+      <h3>Named routes</h3>
+      <p>Pass a route name as the <code>model</code> field to target a specific route you configured in the dashboard. This decouples your app from concrete model names — you can change the underlying model in the dashboard without shipping an app update:</p>
+      <pre data-lang="swift"><code>// Target the route named "chat" in your project
+let options = GenerateOptions(model: "chat")
+
+let response = try await client.generateText(
+    prompt: "Summarize WWDC 2025 in three sentences.",
+    options: options
+)</code></pre>
+      <p>You can also pass a literal model name (e.g. <code>"gpt-4o"</code>) to bypass route selection entirely.</p>
+
       <h3>GenerateOptions</h3>
-      <p>Pass a <code>GenerateOptions</code> value to customize the request:</p>
+      <p>All available options:</p>
       <pre data-lang="swift"><code>let options = GenerateOptions(
-    model: "claude-3-5-sonnet-20241022", // override the route's default model
-    userId: currentUser.id,              // optional: appears in dashboard logs
+    model: "summarizer",        // route name or literal model name; nil uses project default
+    userId: currentUser.id,     // optional: appears in dashboard logs
     maxTokens: 512
 )
 
@@ -91,7 +102,6 @@ let response = try await client.generateText(
     prompt: "Write a short product description for an AI routing SDK.",
     options: options
 )</code></pre>
-      <p>If <code>model</code> is <code>nil</code>, MAIG uses the primary model configured in your project's routing rule.</p>
     </div>
 
     <div class="legal-section">
