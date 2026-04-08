@@ -22,7 +22,273 @@
   </header>
 
   <section class="hero">
-    <object class="hero-bg" type="image/svg+xml" data="assets/beam-split.svg" aria-hidden="true"></object>
+    <svg class="hero-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="hb-glow" filterUnits="userSpaceOnUse" x="-30" y="-30" width="1260" height="560">
+          <feGaussianBlur stdDeviation="3" result="b1"/>
+          <feGaussianBlur stdDeviation="6" result="b2"/>
+          <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="hb-cg" filterUnits="userSpaceOnUse" x="0" y="0" width="1200" height="500">
+          <feGaussianBlur stdDeviation="6"  result="b1"/>
+          <feGaussianBlur stdDeviation="14" result="b2"/>
+          <feGaussianBlur stdDeviation="28" result="b3"/>
+          <feMerge><feMergeNode in="b3"/><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="hb-hf" filterUnits="userSpaceOnUse" x="-100" y="-100" width="1400" height="700">
+          <feGaussianBlur stdDeviation="22" result="b1"/>
+          <feGaussianBlur stdDeviation="45" result="b2"/>
+          <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="hb-bf" filterUnits="userSpaceOnUse" x="-10" y="210" width="1100" height="80">
+          <feGaussianBlur stdDeviation="2"  result="b1"/>
+          <feGaussianBlur stdDeviation="5"  result="b2"/>
+          <feGaussianBlur stdDeviation="10" result="b3"/>
+          <feMerge><feMergeNode in="b3"/><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="hb-dg" filterUnits="userSpaceOnUse" x="-30" y="-30" width="1260" height="560">
+          <feGaussianBlur stdDeviation="3" result="b1"/>
+          <feGaussianBlur stdDeviation="6" result="b2"/>
+          <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="hb-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#0044aa" stop-opacity="0"/>
+          <stop offset="40%"  stop-color="#1a6fff" stop-opacity="0.6"/>
+          <stop offset="88%"  stop-color="#55aaff" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#ffffff"  stop-opacity="1"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Halo glow around center (positions set by JS) -->
+      <circle id="hb-ho"  cx="600" cy="250" r="110" fill="#0033aa" opacity="0.06" filter="url(#hb-hf)"/>
+      <circle id="hb-hi"  cx="600" cy="250" r="58"  fill="#1155dd" opacity="0.09" filter="url(#hb-hf)"/>
+
+      <!-- Beam (start/width set by JS) -->
+      <rect id="hb-beam" x="200" y="248.5" width="400" height="3"   fill="url(#hb-grad)" filter="url(#hb-bf)"/>
+      <rect id="hb-core" x="230" y="249.5" width="370" height="1"   fill="#aaddff" opacity="0.9" filter="url(#hb-bf)"/>
+
+      <!-- Rays (endpoints set by JS) -->
+      <line id="hb-l0" x1="600" y1="250" x2="628" y2="105" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l1" x1="600" y1="250" x2="699" y2="56"  stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l2" x1="600" y1="250" x2="708" y2="116" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l3" x1="600" y1="250" x2="816" y2="135" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l4" x1="600" y1="250" x2="788" y2="224" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l5" x1="600" y1="250" x2="818" y2="317" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l6" x1="600" y1="250" x2="775" y2="336" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l7" x1="600" y1="250" x2="712" y2="362" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l8" x1="600" y1="250" x2="702" y2="451" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+      <line id="hb-l9" x1="600" y1="250" x2="632" y2="399" stroke="#3388ff" stroke-width="1" opacity="0.75" filter="url(#hb-glow)"/>
+
+      <!-- Endpoint dots (colors + positions set by JS) -->
+      <circle id="hb-d0" cx="628" cy="105" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d1" cx="699" cy="56"  r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d2" cx="708" cy="116" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d3" cx="816" cy="135" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d4" cx="788" cy="224" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d5" cx="818" cy="317" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d6" cx="775" cy="336" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d7" cx="712" cy="362" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d8" cx="702" cy="451" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+      <circle id="hb-d9" cx="632" cy="399" r="3.5" fill="#88ccff" filter="url(#hb-dg)"/>
+
+      <!-- Center burst (positions set by JS) -->
+      <circle id="hb-b3"  cx="600" cy="250" r="26"  fill="#0d3acc" opacity="0.28" filter="url(#hb-cg)"/>
+      <circle id="hb-b2"  cx="600" cy="250" r="14"  fill="#2255ee" opacity="0.55" filter="url(#hb-cg)"/>
+      <circle id="hb-b1"  cx="600" cy="250" r="6"   fill="#55aaff" opacity="0.90" filter="url(#hb-cg)"/>
+      <circle id="hb-bd1" cx="600" cy="250" r="2.5" fill="#cce8ff" opacity="1"/>
+      <circle id="hb-bd2" cx="600" cy="250" r="1"   fill="#ffffff"  opacity="1"/>
+
+      <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var VW = 1200, VH = 500;
+        var CX = 600, CY = VH / 2;
+
+        var svg  = document.querySelector('.hero-bg');
+        var hero = document.querySelector('.hero-content');
+
+        // Fixed ray geometry — angles and base distances
+        var RAY_DEFS = [
+          { a: Math.atan2(-145,  28), d: 147.7 },
+          { a: Math.atan2(-194,  99), d: 218.9 },
+          { a: Math.atan2(-134, 108), d: 172.0 },
+          { a: Math.atan2(-115, 216), d: 245.7 },
+          { a: Math.atan2( -26, 188), d: 189.8 },
+          { a: Math.atan2(  67, 218), d: 228.1 },
+          { a: Math.atan2(  86, 175), d: 194.9 },
+          { a: Math.atan2( 112, 112), d: 158.4 },
+          { a: Math.atan2( 201, 102), d: 225.1 },
+          { a: Math.atan2( 149,  32), d: 152.4 }
+        ];
+
+        var rays = RAY_DEFS.map(function (r, i) {
+          return { angle: r.a, baseDist: r.d, phase: (i / RAY_DEFS.length) * Math.PI * 2 };
+        });
+
+        // Random vivid colors for endpoint dots
+        var dotColors = rays.map(function () {
+          return 'hsl(' + Math.floor(Math.random() * 360) + ', 100%, 68%)';
+        });
+
+        var lines     = rays.map(function (_, i) { return document.getElementById('hb-l' + i); });
+        var dots      = rays.map(function (_, i) { return document.getElementById('hb-d' + i); });
+        var beamRect  = document.getElementById('hb-beam');
+        var beamCore  = document.getElementById('hb-core');
+        var haloOuter = document.getElementById('hb-ho');
+        var haloInner = document.getElementById('hb-hi');
+        var burst1    = document.getElementById('hb-b1');
+        var burst2    = document.getElementById('hb-b2');
+        var burst3    = document.getElementById('hb-b3');
+        var burstD1   = document.getElementById('hb-bd1');
+        var burstD2   = document.getElementById('hb-bd2');
+
+        // Apply random colors to dots
+        dots.forEach(function (d, i) { d.setAttribute('fill', dotColors[i]); });
+
+        // Easter egg: click any dot → all dots get new random colors
+        function randomizeColors() {
+          dots.forEach(function (d, i) {
+            dotColors[i] = 'hsl(' + Math.floor(Math.random() * 360) + ', 100%, 68%)';
+            d.setAttribute('fill', dotColors[i]);
+          });
+        }
+
+        // Invisible larger hit circles layered on top of each dot for easier clicking
+        var hitCircles = rays.map(function (_, i) {
+          var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('r', '14');
+          c.setAttribute('fill', 'transparent');
+          c.setAttribute('style', 'cursor:pointer');
+          c.addEventListener('click', randomizeColors);
+          svg.appendChild(c);
+          return c;
+        });
+
+        // Current smoothed ray endpoint positions
+        var pos = rays.map(function (r) {
+          return { x: CX + r.baseDist * Math.cos(r.angle),
+                   y: CY + r.baseDist * Math.sin(r.angle) };
+        });
+
+        function setCenter(el, x, y) {
+          el.setAttribute('cx', x);
+          el.setAttribute('cy', y);
+        }
+
+        function reposition() {
+          var sr = svg.getBoundingClientRect();
+          var hr = hero.getBoundingClientRect();
+          if (sr.width === 0) return;
+
+          var sx = VW / sr.width;
+
+          var beamStart = (hr.left  - sr.left) * sx;
+          CX            = (hr.right - sr.left) * sx;
+          CY            = VH / 2;
+
+          // Beam
+          var bw = CX - beamStart;
+          beamRect.setAttribute('x', beamStart);
+          beamRect.setAttribute('width', bw);
+          beamCore.setAttribute('x', beamStart + 30);
+          beamCore.setAttribute('width', Math.max(0, bw - 30));
+
+          // Center elements
+          [haloOuter, haloInner, burst1, burst2, burst3, burstD1, burstD2].forEach(function (el) {
+            setCenter(el, CX, CY);
+          });
+
+          // Reset ray line origins and positions
+          lines.forEach(function (l) {
+            l.setAttribute('x1', CX);
+            l.setAttribute('y1', CY);
+          });
+          for (var i = 0; i < rays.length; i++) {
+            pos[i].x = CX + rays[i].baseDist * Math.cos(rays[i].angle);
+            pos[i].y = CY + rays[i].baseDist * Math.sin(rays[i].angle);
+          }
+        }
+
+        window.addEventListener('resize', reposition);
+        reposition();
+
+        // Mouse tracking in SVG coordinate space
+        var mouseX = null, mouseY = null;
+        svg.addEventListener('mousemove', function (e) {
+          var r = svg.getBoundingClientRect();
+          mouseX = (e.clientX - r.left) * (VW / r.width);
+          mouseY = (e.clientY - r.top)  * (VH / r.height);
+        });
+        svg.addEventListener('mouseleave', function () { mouseX = null; mouseY = null; });
+
+        var PULSE_PERIOD = 10.0;
+        var PULSE_AMP    = 0.18;
+        var GLOW_PERIOD  = 5.0;
+        var ATTRACT_R    = 170;
+        var ATTRACT_P    = 0.65;
+        var LERP_N       = 1.5;
+        var LERP_A       = 5.0;
+
+        var lastTs = null, elapsed = 0;
+
+        function frame(ts) {
+          if (lastTs === null) lastTs = ts;
+          var dt = Math.min((ts - lastTs) / 1000, 0.05);
+          lastTs = ts;
+          elapsed += dt;
+
+          // Center glow pulse
+          var gt = 0.5 + 0.5 * Math.sin((elapsed / GLOW_PERIOD) * Math.PI * 2 + 1.2);
+          haloOuter.setAttribute('opacity', 0.04 + 0.05 * gt);
+          haloInner.setAttribute('opacity', 0.07 + 0.08 * gt);
+          burst3.setAttribute('opacity',    0.20 + 0.18 * gt);
+          burst2.setAttribute('opacity',    0.45 + 0.25 * gt);
+          burst1.setAttribute('opacity',    0.80 + 0.18 * gt);
+
+          var angFreq = (2 * Math.PI) / PULSE_PERIOD;
+
+          // Closest dot to mouse
+          var ci = -1, cd = Infinity;
+          if (mouseX !== null) {
+            for (var i = 0; i < rays.length; i++) {
+              var ddx = mouseX - pos[i].x, ddy = mouseY - pos[i].y;
+              var d = Math.sqrt(ddx * ddx + ddy * ddy);
+              if (d < cd) { cd = d; ci = i; }
+            }
+            if (cd > ATTRACT_R) ci = -1;
+          }
+
+          for (var i = 0; i < rays.length; i++) {
+            var r = rays[i];
+            var pulse = 1 + PULSE_AMP * Math.sin(elapsed * angFreq + r.phase);
+            var tx = CX + r.baseDist * pulse * Math.cos(r.angle);
+            var ty = CY + r.baseDist * pulse * Math.sin(r.angle);
+
+            if (i === ci) {
+              var af = ATTRACT_P * Math.max(0, 1 - cd / ATTRACT_R);
+              tx += (mouseX - tx) * af;
+              ty += (mouseY - ty) * af;
+            }
+
+            var k = Math.min(1, (i === ci ? LERP_A : LERP_N) * dt);
+            pos[i].x += (tx - pos[i].x) * k;
+            pos[i].y += (ty - pos[i].y) * k;
+
+            lines[i].setAttribute('x2', pos[i].x);
+            lines[i].setAttribute('y2', pos[i].y);
+            dots[i].setAttribute('cx',       pos[i].x);
+            dots[i].setAttribute('cy',       pos[i].y);
+            hitCircles[i].setAttribute('cx', pos[i].x);
+            hitCircles[i].setAttribute('cy', pos[i].y);
+          }
+
+          requestAnimationFrame(frame);
+        }
+
+        requestAnimationFrame(frame);
+      });
+      </script>
+    </svg>
+
     <div class="hero-content">
       <div class="badge">Mobile AI Gateway</div>
       <h1>One SDK.<br>Every AI model.</h1>
