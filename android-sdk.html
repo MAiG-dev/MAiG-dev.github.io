@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Android SDK — MAIG Docs</title>
+  <meta name="description" content="Integrate the MAIG Android SDK into your Kotlin app using Gradle. Generate text, stream responses with Flow, and handle errors." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refunds</a>
+      <a href="contact.html">Contact</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="doc-breadcrumb">
+      <a href="docs.html">Docs</a>
+      <span>/</span>
+      Android SDK
+    </div>
+
+    <div class="page-header">
+      <h1>Android SDK</h1>
+      <p class="updated">Kotlin &middot; Android API 26+ &middot; Gradle</p>
+    </div>
+
+    <p>The MAIG Android SDK provides a native Kotlin interface for generating text and streaming responses from any AI model configured in your project. Requests are authenticated with your project API key and routed through MAIG's gateway — your provider credentials never leave the server.</p>
+
+    <div class="legal-section">
+      <h2>Requirements</h2>
+      <ul>
+        <li>Kotlin 1.9 or later</li>
+        <li>Java 17 or later</li>
+        <li>Android API 26 or later (or any JVM target)</li>
+        <li>A MAIG project API key — see the <a href="dashboard-setup.html">Dashboard Setup guide</a></li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>Installation</h2>
+      <h3>Gradle</h3>
+      <p>Add the dependency to your module's <code>build.gradle.kts</code>:</p>
+      <pre data-lang="kotlin"><code>dependencies {
+    implementation("com.maig:sdk:0.1.0")
+}</code></pre>
+      <div class="doc-note">
+        <strong>Note:</strong> Maven Central publishing is coming soon. Until then, build and publish to your local Maven repository (see below).
+      </div>
+
+      <h3>Local build</h3>
+      <p>Clone the repository and publish to your local Maven repository:</p>
+      <pre data-lang="bash"><code>git clone https://github.com/your-org/maig-android-sdk.git
+cd maig-android-sdk
+./gradlew :sdk:publishToMavenLocal</code></pre>
+      <p>Then add <code>mavenLocal()</code> to your project's repository list:</p>
+      <pre data-lang="kotlin"><code>// settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Initialization</h2>
+      <p>Create one shared <code>AIGatewayClient</code> instance — typically in a ViewModel or a dependency injection module:</p>
+      <pre data-lang="kotlin"><code>import com.maig.sdk.AIGatewayClient
+
+val client = AIGatewayClient(apiKey = "maig_YOUR_PROJECT_KEY")</code></pre>
+      <p>To target a local or staging gateway, pass a custom <code>baseUrl</code>:</p>
+      <pre data-lang="kotlin"><code>val client = AIGatewayClient(
+    apiKey = "maig_YOUR_PROJECT_KEY",
+    baseUrl = "https://staging.maig.dev"
+)</code></pre>
+      <div class="doc-note">
+        <strong>Security:</strong> Do not hard-code your API key in source files committed to a public repository. Inject it at build time via <code>BuildConfig</code> using a local <code>local.properties</code> entry or a secrets manager.
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Generating text</h2>
+      <p>Use <code>generateText</code> to make a single round-trip request and receive the complete response as a <code>String</code>. It is a suspend function and must be called from a coroutine:</p>
+      <pre data-lang="kotlin"><code>import com.maig.sdk.AIGatewayClient
+import com.maig.sdk.GenerateOptions
+
+val client = AIGatewayClient(apiKey = "maig_YOUR_KEY")
+
+// suspend function — call from a coroutine or viewModelScope
+val response = client.generateText(
+    prompt = "Summarise the following article in three bullet points: ...",
+    options = GenerateOptions(model = "gpt-4o", maxTokens = 512),
+)
+println(response)</code></pre>
+
+      <h3>Named routes</h3>
+      <p>Pass a route name as the <code>model</code> field to target a specific route you configured in the dashboard. This decouples your app from concrete model names — you can change the underlying model in the dashboard without shipping an app update:</p>
+      <pre data-lang="kotlin"><code>// Target the route named "chat" in your project
+val options = GenerateOptions(model = "chat")
+
+val response = client.generateText(
+    prompt = "Summarise the following article in three bullet points: ...",
+    options = options,
+)</code></pre>
+      <p>You can also pass a literal model name (e.g. <code>"gpt-4o"</code>) to bypass route selection entirely.</p>
+
+      <h3>GenerateOptions</h3>
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>model</code></td><td><code>String?</code></td><td><code>"auto"</code></td><td>Route name or literal model identifier; null uses the project default</td></tr>
+          <tr><td><code>userId</code></td><td><code>String?</code></td><td><code>null</code></td><td>Stable end-user ID for rate limiting; appears in dashboard logs</td></tr>
+          <tr><td><code>maxTokens</code></td><td><code>Int?</code></td><td><code>null</code></td><td>Token budget for the response</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Retry behaviour</h3>
+      <p><code>generateText</code> retries up to <strong>2 times</strong> with exponential backoff (1 s, 2 s) on transient server and network errors. Auth failures are never retried.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Streaming text</h2>
+      <p>Use <code>streamText</code> to receive tokens as they are generated. The method returns a Kotlin <code>Flow&lt;String&gt;</code> that emits tokens as they arrive:</p>
+      <pre data-lang="kotlin"><code>client.streamText(prompt = "Write a haiku about coroutines")
+    .collect { token -> print(token) }</code></pre>
+      <p>Streaming uses Server-Sent Events (SSE) parsed incrementally over an OkHttp response body. <code>streamText</code> does not retry — let the caller decide whether to restart the flow.</p>
+
+      <h3>ViewModel example</h3>
+      <p>A typical pattern for an Android chat screen:</p>
+      <pre data-lang="kotlin"><code>class ChatViewModel : ViewModel() {
+    private val client = AIGatewayClient(apiKey = BuildConfig.MAIG_API_KEY)
+
+    val response = MutableStateFlow("")
+
+    fun ask(prompt: String) {
+        viewModelScope.launch {
+            try {
+                client.streamText(prompt).collect { token ->
+                    response.value += token
+                }
+            } catch (e: AIGatewayError.AuthFailure) {
+                // handle invalid key
+            } catch (e: AIGatewayError.ServerError) {
+                // handle server error (e.statusCode, e.body)
+            } catch (e: AIGatewayError.NetworkError) {
+                // handle connectivity issues
+            }
+        }
+    }
+}</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Error handling</h2>
+      <p>Both <code>generateText</code> and <code>streamText</code> throw subtypes of the <code>AIGatewayError</code> sealed class:</p>
+      <pre data-lang="kotlin"><code>try {
+    val response = client.generateText("Hello")
+    display(response)
+} catch (e: AIGatewayError.AuthFailure) {
+    // HTTP 401 — bad or expired API key; not retried
+    showError("Authentication failed. Check your API key.")
+} catch (e: AIGatewayError.ServerError) {
+    // Gateway or upstream provider returned a non-2xx response
+    println("HTTP ${e.statusCode}: ${e.body}")
+} catch (e: AIGatewayError.NetworkError) {
+    // Device is offline or connection was lost
+    println("Network problem: ${e.cause?.message}")
+}</code></pre>
+
+      <h3>Error cases</h3>
+      <ul>
+        <li><code>AuthFailure</code> — the project API key is missing, malformed, or revoked (HTTP 401); never retried</li>
+        <li><code>ServerError(statusCode, body)</code> — the gateway responded with a non-2xx HTTP status; includes the status code and an optional response body</li>
+        <li><code>NetworkError(cause)</code> — transport-level failure; the associated value is the underlying exception</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>Next steps</h2>
+      <ul>
+        <li>Configure fallback routing in the <a href="dashboard-setup.html">dashboard</a> to improve resilience when a provider is unavailable</li>
+        <li>View per-request logs, token counts, and latency in the dashboard's <strong>Logs</strong> tab</li>
+        <li>Questions? Email <a href="mailto:support@maig.dev">support@maig.dev</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="docs.html">Docs</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+</body>
+</html>
