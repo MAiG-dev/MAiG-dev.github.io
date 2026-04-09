@@ -6,7 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MAIG — Mobile AI Gateway</title>
   <meta name="description" content="A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK." />
+  <link rel="canonical" href="https://maig.dev/" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maig.dev/" />
+  <meta property="og:title" content="MAIG — Mobile AI Gateway" />
+  <meta property="og:description" content="A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MAIG — Mobile AI Gateway" />
+  <meta name="twitter:description" content="A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
   <link rel="stylesheet" href="assets/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "MAIG — Mobile AI Gateway",
+    "description": "A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK.",
+    "url": "https://maig.dev",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "iOS, Android",
+    "offers": [
+      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
+      { "@type": "Offer", "name": "Pro", "price": "29", "priceCurrency": "USD", "billingIncrement": "month" },
+      { "@type": "Offer", "name": "Business", "price": "99", "priceCurrency": "USD", "billingIncrement": "month" }
+    ]
+  }
+  </script>
 </head>
 <body>
   <header>
@@ -20,6 +48,9 @@
       <a href="docs.html">Docs</a>
       <a href="https://app.maig.dev" class="btn btn-sm">Dashboard</a>
     </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </header>
 
   <section class="hero">
@@ -382,5 +413,6 @@
     </div>
     <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
   </footer>
+  <script src="assets/nav.js"></script>
 </body>
 </html>
