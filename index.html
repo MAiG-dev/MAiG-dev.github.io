@@ -323,42 +323,120 @@
 
     <div class="hero-content">
       <div class="badge">Mobile AI Gateway</div>
-      <h1>One SDK.<br>Every AI model.</h1>
-      <p class="subtitle">MAIG routes your mobile app's AI requests across OpenAI, Anthropic, and other providers — with built-in key management, usage analytics, and automatic fallback.</p>
+      <h1>You can't ship AI in your mobile app without a backend.</h1>
+      <p class="subtitle">One SDK. Encrypted key management. Multi-provider routing. Everything you'd build yourself, already built.</p>
       <a href="https://app.maig.dev" class="btn">Get started free</a>
     </div>
   </section>
 
   <main>
+
     <section>
-      <h2>What we offer</h2>
+      <h2>Building AI into a mobile app is harder than it looks.</h2>
+      <div class="problem-grid">
+        <div class="problem-item">
+          <div class="problem-icon">🔑</div>
+          <h3>Your API key can't live in the binary</h3>
+          <p>Keys embedded in iOS or Android apps can be extracted. You need a server to hold them — which means building a server before you can build the feature.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">🔄</div>
+          <h3>Switching providers means touching app code</h3>
+          <p>Hard-coded provider integrations mean every model change, every fallback, every routing tweak requires a new release and App Store review.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">📉</div>
+          <h3>You're flying blind in production</h3>
+          <p>Without logging, you don't know which requests are failing, how much each feature costs, or why your AI responses are slow.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Up and running in 15 minutes.</h2>
+      <ol class="doc-steps">
+        <li>
+          <div class="step-body">
+            <h3>Create a project</h3>
+            <p>Sign in to the dashboard and create a project. You'll get a project API key — this is what your app uses, not your provider credentials.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <h3>Connect your providers</h3>
+            <p>Add your OpenAI or Anthropic API keys in the dashboard. They're encrypted and stored server-side — never in your app.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <h3>Make your first AI call</h3>
+            <p>Install the SDK and start making requests. MAIG handles routing, streaming, and fallback automatically.</p>
+            <div class="code-tabs">
+              <div class="code-tab-bar">
+                <button class="code-tab-btn active" data-tab="swift">Swift</button>
+                <button class="code-tab-btn" data-tab="android">Android</button>
+              </div>
+              <div class="code-panel" data-panel="swift">
+                <pre data-lang="swift"><code>import AIGatewaySDK
+
+let client = AIGatewayClient(apiKey: "maig_...")
+
+// One-shot
+let text = try await client.generateText("Summarise this article: ...")
+
+// Streaming
+for await token in client.streamText("Tell me a story") {
+    print(token)
+}</code></pre>
+              </div>
+              <div class="code-panel" data-panel="android" hidden>
+                <pre data-lang="kotlin"><code>import com.maig.sdk.AIGatewayClient
+
+val client = AIGatewayClient(apiKey = "maig_...")
+
+// One-shot
+val text = client.generateText("Summarise this article: ...")
+
+// Streaming
+client.streamText("Tell me a story").collect { token -&gt;
+    print(token)
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What you get</h2>
       <div class="features">
         <div class="feature">
           <div class="feature-icon">🔀</div>
-          <h3>Unified Routing</h3>
-          <p>Send requests to any AI provider through a single endpoint. Switch models without touching your app code.</p>
+          <h3>Multi-provider routing</h3>
+          <p>Switch between OpenAI and Anthropic from the dashboard. No app update, no code change — just update your route config.</p>
         </div>
         <div class="feature">
           <div class="feature-icon">🔑</div>
-          <h3>Secure Key Management</h3>
-          <p>Store your provider API keys server-side. Never ship secrets in your mobile app binary.</p>
+          <h3>Encrypted key storage</h3>
+          <p>Your provider API keys are encrypted at rest and never leave the server. Your app only ever holds a MAIG project key.</p>
         </div>
         <div class="feature">
           <div class="feature-icon">📊</div>
-          <h3>Usage Analytics</h3>
-          <p>Per-project request logs, token counts, latency metrics, and error rates — all in the dashboard.</p>
+          <h3>Request logs and analytics</h3>
+          <p>Every request is logged — latency, token count, model, status. Know exactly what your AI is doing and what it costs.</p>
         </div>
         <div class="feature">
           <div class="feature-icon">📱</div>
-          <h3>iOS SDK</h3>
-          <p>Native Swift SDK with async/await support, streaming responses via SSE, and iOS 16+ compatibility.</p>
+          <h3>Native iOS and Android SDKs</h3>
+          <p>Swift SDK with async/await and AsyncStream. Kotlin SDK with coroutines and Flow. Both support streaming responses via SSE.</p>
         </div>
       </div>
     </section>
 
     <section>
       <h2>Pricing</h2>
-      <p>All plans include access to the dashboard, iOS SDK, and request logging. Upgrade or cancel anytime.</p>
+      <p>All plans include the dashboard, iOS and Android SDKs, and request logging. Upgrade or cancel anytime.</p>
       <div class="pricing-grid">
         <div class="plan">
           <div class="plan-name">Free</div>
@@ -401,6 +479,13 @@
       <h2>Supported providers</h2>
       <p>MAIG currently supports routing to <strong>OpenAI</strong> (GPT-4o, GPT-4, GPT-3.5) and <strong>Anthropic</strong> (Claude 3.5 Sonnet, Claude 3 Haiku, Claude 3 Opus). Additional providers are on the roadmap.</p>
     </section>
+
+    <section class="cta-section">
+      <h2>Start building in minutes.</h2>
+      <p>Free tier includes 1,000 requests per month. No credit card required.</p>
+      <a href="https://app.maig.dev" class="btn">Get started free</a>
+    </section>
+
   </main>
 
   <footer>
@@ -414,5 +499,15 @@
     <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
   </footer>
   <script src="assets/nav.js"></script>
+  <script>
+    document.querySelectorAll('.code-tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tabs = btn.closest('.code-tabs');
+        tabs.querySelectorAll('.code-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        tabs.querySelectorAll('.code-panel').forEach(function(p) { p.hidden = p.dataset.panel !== btn.dataset.tab; });
+        btn.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>

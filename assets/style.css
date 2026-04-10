@@ -131,7 +131,7 @@ li { margin-bottom: 0.3rem; }
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
-  height: 480px;
+  height: 580px;
 }
 
 /* SVG fills the entire hero area as a background layer */
@@ -148,14 +148,14 @@ li { margin-bottom: 0.3rem; }
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: 4rem 2rem;
-  max-width: 500px;
+  padding: 4rem 2rem 3rem;
+  max-width: 520px;
   margin: 0 auto;
   text-align: center;
 }
 
-.hero h1 { font-size: 2.8rem; }
-.hero .subtitle { font-size: 1.15rem; max-width: 400px; margin: 0.5rem auto 2.5rem; }
+.hero h1 { font-size: 2.4rem; }
+.hero .subtitle { font-size: 1.05rem; max-width: 420px; margin: 1rem auto 2rem; }
 
 @media (max-width: 640px) {
   .hero { height: auto; }
@@ -431,3 +431,74 @@ pre code {
 
 .doc-breadcrumb a { color: var(--muted); }
 .doc-breadcrumb a:hover { color: var(--text); }
+
+/* ── Problem section ── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.problem-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.problem-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+.problem-item h3 { margin: 0 0 0.4rem; font-size: 0.95rem; color: var(--text); }
+.problem-item p { font-size: 0.85rem; margin: 0; }
+
+/* ── Code tabs ── */
+.code-tabs { margin-top: 1rem; }
+
+.code-tab-bar {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+.code-tab-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.code-tab-btn:hover { color: var(--text); }
+
+.code-tab-btn.active {
+  color: var(--accent-light);
+  background: var(--surface);
+  border-bottom: 1px solid var(--surface);
+}
+
+.code-panel pre { margin-top: 0; border-radius: 0 10px 10px 10px; }
+
+/* ── CTA section ── */
+.cta-section {
+  text-align: center;
+  padding: 3rem 2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  margin-top: 1rem;
+}
+
+.cta-section h2 { margin-top: 0; font-size: 1.6rem; }
+.cta-section p { margin-bottom: 1.5rem; }
+
+@media (max-width: 640px) {
+  .problem-grid { grid-template-columns: 1fr; }
+}
