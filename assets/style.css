@@ -432,6 +432,36 @@ pre code {
 .doc-breadcrumb a { color: var(--muted); }
 .doc-breadcrumb a:hover { color: var(--text); }
 
+/* ── Founder note ── */
+.founder-note-card {
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 1rem 0;
+}
+
+.founder-quote {
+  font-size: 1.05rem;
+  color: var(--text);
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.founder-byline {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  margin-bottom: 1.25rem;
+}
+
+.founder-cta-text {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 0;
+}
+
 /* ── Problem section ── */
 .problem-grid {
   display: grid;
