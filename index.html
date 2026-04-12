@@ -29,9 +29,10 @@
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "iOS, Android",
     "offers": [
-      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
+      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "description": "2,500 requests/month" },
+      { "@type": "Offer", "name": "Starter", "price": "9", "priceCurrency": "USD", "billingIncrement": "month" },
       { "@type": "Offer", "name": "Pro", "price": "29", "priceCurrency": "USD", "billingIncrement": "month" },
-      { "@type": "Offer", "name": "Business", "price": "99", "priceCurrency": "USD", "billingIncrement": "month" }
+      { "@type": "Offer", "name": "Business", "price": "199", "priceCurrency": "USD", "billingIncrement": "month" }
     ]
   }
   </script>
@@ -443,10 +444,21 @@ client.streamText("Tell me a story").collect { token -&gt;
           <div class="plan-price">$0<span>/mo</span></div>
           <div class="plan-desc">For personal projects and prototyping.</div>
           <ul>
-            <li>1,000 requests / month</li>
+            <li>2,500 requests / month</li>
             <li>1 project</li>
             <li>Dashboard access</li>
-            <li>Request logs (7 days)</li>
+            <li>Request logs (3 days)</li>
+          </ul>
+        </div>
+        <div class="plan">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">$9<span>/mo</span></div>
+          <div class="plan-desc">For early-stage apps and side projects.</div>
+          <ul>
+            <li>15,000 requests / month</li>
+            <li>2 projects</li>
+            <li>Dashboard access</li>
+            <li>Request logs (14 days)</li>
           </ul>
         </div>
         <div class="plan featured">
@@ -455,19 +467,19 @@ client.streamText("Tell me a story").collect { token -&gt;
           <div class="plan-price">$29<span>/mo</span></div>
           <div class="plan-desc">For indie developers and small teams.</div>
           <ul>
-            <li>50,000 requests / month</li>
-            <li>3 projects</li>
+            <li>60,000 requests / month</li>
+            <li>5 projects</li>
             <li>Dashboard access</li>
             <li>Request logs (30 days)</li>
           </ul>
         </div>
         <div class="plan">
           <div class="plan-name">Business</div>
-          <div class="plan-price">$99<span>/mo</span></div>
+          <div class="plan-price">$199<span>/mo</span></div>
           <div class="plan-desc">For production apps and growing teams.</div>
           <ul>
-            <li>250,000 requests / month</li>
-            <li>10 projects</li>
+            <li>300,000 requests / month</li>
+            <li>15 projects</li>
             <li>Dashboard access</li>
             <li>Request logs (90 days)</li>
           </ul>
@@ -491,7 +503,7 @@ client.streamText("Tell me a story").collect { token -&gt;
 
     <section class="cta-section">
       <h2>Start building in minutes.</h2>
-      <p>Free tier includes 1,000 requests per month. No credit card required.</p>
+      <p>Free tier includes 2,500 requests per month. No credit card required.</p>
       <a href="https://app.maig.dev" class="btn">Get started free</a>
     </section>
 
