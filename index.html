@@ -449,6 +449,9 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li>Dashboard access</li>
             <li>Request logs (3 days)</li>
             <li>Hard cap — no overages</li>
+            <li class="plan-no">No retry on failure</li>
+            <li class="plan-no">No provider fallback</li>
+            <li class="plan-no">No request throttling</li>
           </ul>
         </div>
         <div class="plan">
@@ -460,7 +463,10 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li>2 projects</li>
             <li>Dashboard access</li>
             <li>Request logs (14 days)</li>
+            <li>Retry on failure (up to 1 retry)</li>
             <li>Overage: $0.0008 / request</li>
+            <li class="plan-no">No provider fallback</li>
+            <li class="plan-no">No request throttling</li>
           </ul>
         </div>
         <div class="plan featured">
@@ -473,6 +479,9 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li>5 projects</li>
             <li>Dashboard access</li>
             <li>Request logs (30 days)</li>
+            <li>Retry on failure (up to 3 retries)</li>
+            <li>Provider fallback</li>
+            <li>Request throttling &amp; quotas</li>
             <li>Overage: $0.0008 / request</li>
           </ul>
         </div>
@@ -485,6 +494,9 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li>15 projects</li>
             <li>Dashboard access</li>
             <li>Request logs (90 days)</li>
+            <li>Retry on failure (up to 5 retries)</li>
+            <li>Provider fallback</li>
+            <li>Request throttling &amp; quotas</li>
             <li>Overage: $0.0008 / request</li>
           </ul>
         </div>

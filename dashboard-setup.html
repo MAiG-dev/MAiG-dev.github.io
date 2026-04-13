@@ -97,9 +97,15 @@
             <ul>
               <li><strong>Route name</strong> — a short identifier you choose (e.g. <code>chat</code>, <code>summarizer</code>, <code>fast</code>). Your app passes this name as the <code>model</code> field in requests to target this route directly.</li>
               <li><strong>Primary model</strong> — the AI model MAIG will use (e.g. <code>gpt-4o</code> or <code>claude-3-5-sonnet-20241022</code>)</li>
-              <li><strong>Fallback model</strong> (optional) — the model to try if the primary provider returns an error or times out</li>
+              <li><strong>Fallback model</strong> (optional, Pro and above) — the model to try if the primary provider returns an error or times out</li>
+              <li><strong>Retry on failure</strong> (optional, Starter and above) — automatically retry failed requests. Starter allows up to 1 retry; Pro up to 3; Business up to 5. Retries use exponential back-off starting at 100 ms.</li>
+              <li><strong>Rate limiting</strong> (optional, Pro and above) — cap requests to this route at a fixed number per minute or per hour. Useful for controlling costs on high-traffic routes.</li>
+              <li><strong>Request quota</strong> (optional, Pro and above) — set a hard ceiling on total requests per day, week, or month for this route.</li>
             </ul>
             <p>Naming routes lets you decouple your app code from specific model names. You can swap the underlying model in the dashboard at any time without releasing an app update.</p>
+            <div class="doc-note">
+              <strong>Plan limits:</strong> Advanced route features (fallback, retry, throttling) are gated by plan. Controls are visible to all users in the dashboard but locked with an upgrade prompt if your plan does not include them.
+            </div>
           </div>
         </li>
 

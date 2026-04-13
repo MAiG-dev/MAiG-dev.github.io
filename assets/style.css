@@ -248,6 +248,8 @@ li { margin-bottom: 0.3rem; }
 .plan ul { list-style: none; padding: 0; }
 .plan ul li { font-size: 0.85rem; color: var(--muted); padding: 0.25rem 0; border-top: 1px solid var(--border); }
 .plan ul li::before { content: "✓ "; color: var(--accent-light); }
+.plan ul li.plan-no::before { content: "✗ "; color: var(--muted); opacity: 0.5; }
+.plan ul li.plan-no { opacity: 0.55; }
 .pricing-overage-note { font-size: 0.85rem; margin-top: 1.25rem; text-align: center; }
 
 /* ── Features ── */
