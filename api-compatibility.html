@@ -63,7 +63,7 @@
 
     <div class="page-header">
       <h1>API Compatibility</h1>
-      <p class="updated">OpenAI &middot; Anthropic &middot; /v1/chat/completions</p>
+      <p class="updated">OpenAI &middot; Anthropic &middot; Google &middot; /v1/chat/completions</p>
     </div>
 
     <p>The gateway exposes a <code>/v1/chat/completions</code> endpoint that follows the OpenAI chat completions API. You can use the same request format you'd send directly to OpenAI. This page documents which parameters are supported per provider and what happens when a parameter has no equivalent.</p>
@@ -78,6 +78,7 @@
               <th>Parameter</th>
               <th>OpenAI models</th>
               <th>Anthropic models</th>
+              <th>Google models</th>
               <th>Notes</th>
             </tr>
           </thead>
@@ -86,10 +87,12 @@
               <td><code>messages</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
-              <td>System role extracted to top-level system param</td>
+              <td>&#x2705; Supported</td>
+              <td>System role extracted to top-level system param for Anthropic and Google</td>
             </tr>
             <tr>
               <td><code>model</code></td>
+              <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
               <td></td>
@@ -98,10 +101,12 @@
               <td><code>max_tokens</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
-              <td>Defaults to 1024 for Anthropic if omitted</td>
+              <td>&#x2705; Supported</td>
+              <td>Defaults to 1024 for Anthropic if omitted; mapped to <code>maxOutputTokens</code> for Google</td>
             </tr>
             <tr>
               <td><code>max_completion_tokens</code></td>
+              <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
               <td>Alias for <code>max_tokens</code>; takes precedence if both provided</td>
@@ -110,10 +115,12 @@
               <td><code>stream</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
+              <td>&#x2705; Supported</td>
               <td></td>
             </tr>
             <tr>
               <td><code>temperature</code></td>
+              <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
               <td></td>
@@ -122,52 +129,61 @@
               <td><code>top_p</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
-              <td></td>
+              <td>&#x2705; Supported</td>
+              <td>Mapped to <code>topP</code> for Google</td>
             </tr>
             <tr>
               <td><code>stop</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x2705; Supported</td>
-              <td>Mapped to <code>stop_sequences</code> array for Anthropic</td>
+              <td>&#x26A0;&#xFE0F; Dropped</td>
+              <td>Mapped to <code>stop_sequences</code> for Anthropic; no Google equivalent</td>
             </tr>
             <tr>
               <td><code>user</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x26A0;&#xFE0F; Dropped</td>
-              <td>No Anthropic equivalent; used for gateway analytics only</td>
+              <td>&#x26A0;&#xFE0F; Dropped</td>
+              <td>No equivalent for Anthropic or Google; used for gateway analytics only</td>
             </tr>
             <tr>
               <td><code>frequency_penalty</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x26A0;&#xFE0F; Dropped</td>
-              <td>No Anthropic equivalent; silently ignored</td>
+              <td>&#x26A0;&#xFE0F; Dropped</td>
+              <td>No equivalent for Anthropic or Google; silently ignored</td>
             </tr>
             <tr>
               <td><code>presence_penalty</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x26A0;&#xFE0F; Dropped</td>
-              <td>No Anthropic equivalent; silently ignored</td>
+              <td>&#x26A0;&#xFE0F; Dropped</td>
+              <td>No equivalent for Anthropic or Google; silently ignored</td>
             </tr>
             <tr>
               <td><code>seed</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x26A0;&#xFE0F; Dropped</td>
-              <td>No Anthropic equivalent; silently ignored</td>
+              <td>&#x26A0;&#xFE0F; Dropped</td>
+              <td>No equivalent for Anthropic or Google; silently ignored</td>
             </tr>
             <tr>
               <td><code>response_format</code></td>
               <td>&#x2705; Supported</td>
               <td>&#x26A0;&#xFE0F; Partial</td>
-              <td><code>json_object</code> mode approximated via system prompt injection; behavior may differ</td>
+              <td>&#x26A0;&#xFE0F; Dropped</td>
+              <td><code>json_object</code> mode approximated via system prompt injection for Anthropic; silently ignored for Google</td>
             </tr>
             <tr>
               <td><code>n</code> (&gt; 1)</td>
               <td>&#x2705; Supported</td>
               <td>&#x26A0;&#xFE0F; Dropped</td>
-              <td>Anthropic always returns 1 completion; extra completions silently dropped</td>
+              <td>&#x26A0;&#xFE0F; Dropped</td>
+              <td>Anthropic and Google always return 1 completion; extra completions silently dropped</td>
             </tr>
             <tr>
               <td><code>tools</code> / <code>tool_choice</code></td>
+              <td>&#x1F6A7; Planned</td>
               <td>&#x1F6A7; Planned</td>
               <td>&#x1F6A7; Planned</td>
               <td>Function calling not yet supported</td>
@@ -176,10 +192,12 @@
               <td><code>logprobs</code></td>
               <td>&#x274C; Not supported</td>
               <td>&#x274C; Not supported</td>
+              <td>&#x274C; Not supported</td>
               <td></td>
             </tr>
             <tr>
               <td><code>top_logprobs</code></td>
+              <td>&#x274C; Not supported</td>
               <td>&#x274C; Not supported</td>
               <td>&#x274C; Not supported</td>
               <td></td>
@@ -197,7 +215,7 @@
 
     <div class="legal-section">
       <h2>Provider routing</h2>
-      <p>The gateway selects the provider based on the model name in the request. Model names that begin with <code>claude</code> (e.g. <code>claude-3-5-sonnet-20241022</code>) are routed to Anthropic. All other model names are routed to OpenAI. No additional heuristics are applied.</p>
+      <p>The gateway selects the provider based on the model name in the request. Model names that begin with <code>claude</code> (e.g. <code>claude-3-5-sonnet-20241022</code>) are routed to Anthropic. Model names that begin with <code>gemini</code> (e.g. <code>gemini-2.0-flash</code>) are routed to Google. All other model names are routed to OpenAI. No additional heuristics are applied.</p>
     </div>
   </main>
 
