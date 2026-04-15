@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Migration Guide — MAIG Docs</title>
+  <meta name="description" content="Switching from OpenAI to MAIG. Change one line of code: point your baseURL at api.maig.dev and swap your API key." />
+  <link rel="canonical" href="https://maig.dev/migration-guide.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maig.dev/migration-guide.html" />
+  <meta property="og:title" content="Migration Guide — MAIG Docs" />
+  <meta property="og:description" content="Switching from OpenAI to MAIG. Change one line of code: point your baseURL at api.maig.dev and swap your API key." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Migration Guide — MAIG Docs" />
+  <meta name="twitter:description" content="Switching from OpenAI to MAIG. Change one line of code: point your baseURL at api.maig.dev and swap your API key." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .diff-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.4rem;
+    }
+    .diff-label.before {
+      background: color-mix(in srgb, #ef4444 15%, transparent);
+      border: 1px solid color-mix(in srgb, #ef4444 35%, transparent);
+      color: #fca5a5;
+    }
+    .diff-label.after {
+      background: color-mix(in srgb, #22c55e 15%, transparent);
+      border: 1px solid color-mix(in srgb, #22c55e 35%, transparent);
+      color: #86efac;
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "Migration Guide — MAIG Docs",
+    "description": "Switching from OpenAI to MAIG. Change one line of code: point your baseURL at api.maig.dev and swap your API key.",
+    "url": "https://maig.dev/migration-guide.html",
+    "publisher": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC", "url": "https://maig.dev" }
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refunds</a>
+      <a href="contact.html">Contact</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <div class="doc-breadcrumb">
+      <a href="docs.html">Docs</a>
+      <span>/</span>
+      Migration Guide
+    </div>
+
+    <div class="page-header">
+      <h1>Migration Guide</h1>
+      <p class="updated">OpenAI SDK &middot; Python &middot; Node.js &middot; TypeScript</p>
+    </div>
+
+    <div class="doc-note">
+      <strong>One-line summary:</strong> Change one line of code — point <code>baseURL</code> at <code>api.maig.dev</code> and use your MAIG API key instead of your OpenAI key. Everything else stays the same.
+    </div>
+
+    <div class="legal-section">
+      <h2>Python (openai SDK)</h2>
+      <p>Install the standard OpenAI Python SDK if you haven't already (<code>pip install openai</code>), then change the client initialization:</p>
+
+      <div class="diff-label before">Before</div>
+      <pre data-lang="python"><code>from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-your-openai-key-here"
+)</code></pre>
+
+      <div class="diff-label after">After</div>
+      <pre data-lang="python"><code>from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.maig.dev/v1",
+    api_key="maig_your_key_here"
+)
+
+# The rest of your code is unchanged:
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Hello!"}]
+)</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Node.js / TypeScript (openai SDK)</h2>
+      <p>Install the standard OpenAI Node.js SDK if you haven't already (<code>npm install openai</code>), then change the client initialization:</p>
+
+      <div class="diff-label before">Before</div>
+      <pre data-lang="typescript"><code>import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});</code></pre>
+
+      <div class="diff-label after">After</div>
+      <pre data-lang="typescript"><code>import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.maig.dev/v1",
+  apiKey: process.env.MAIG_API_KEY,
+});
+
+// The rest of your code is unchanged:
+const response = await client.chat.completions.create({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: "Hello!" }],
+});</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>What stays the same</h2>
+      <ul>
+        <li>Message format — <code>role</code> and <code>content</code> fields are identical</li>
+        <li>Response format — the same <code>choices</code>, <code>message</code>, <code>finish_reason</code>, and <code>usage</code> fields</li>
+        <li>Streaming with SSE — <code>stream: true</code> works exactly as before; the same delta chunks and <code>[DONE]</code> terminator</li>
+        <li>Error types — <code>401</code>, <code>422</code>, <code>429</code>, and other standard HTTP status codes</li>
+        <li>Model names — pass <code>"gpt-4o"</code>, <code>"gpt-4"</code>, or any OpenAI model name as-is</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>What's different</h2>
+      <ul>
+        <li>API key format — MAIG keys start with <code>maig_</code> instead of <code>sk-</code></li>
+        <li>You can use Claude and Gemini models without changing any other code — just pass a <code>claude-</code> or <code>gemini-</code> model name</li>
+        <li>Usage is tracked per-project in the MAIG dashboard, not your OpenAI account</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>Using MAIG routing</h2>
+      <p>Instead of passing a model name, you can pass a <strong>route name</strong> you've configured in the MAIG dashboard. MAIG handles provider selection, fallback, and retries automatically.</p>
+      <pre data-lang="python"><code># Pass the route name as the model field
+response = client.chat.completions.create(
+    model="my-production-route",
+    messages=[{"role": "user", "content": "Hello!"}]
+)</code></pre>
+      <p>This decouples your code from specific model names or providers. You can change the underlying model, swap providers, or configure fallback behaviour in the dashboard without touching your application code.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Framework compatibility</h2>
+      <p>MAIG's gateway is OpenAI-compatible. Any library or framework that supports a custom <code>baseURL</code> works out of the box — no special integration required.</p>
+      <ul>
+        <li><strong>LangChain</strong> — set <code>openai_api_base</code> or <code>base_url</code> on the <code>ChatOpenAI</code> object</li>
+        <li><strong>LlamaIndex</strong> — pass <code>api_base</code> to <code>OpenAI()</code> in your LLM settings</li>
+        <li><strong>Vercel AI SDK</strong> — use the <code>openai</code> provider with <code>baseURL</code> in <code>createOpenAI()</code></li>
+        <li><strong>LiteLLM</strong> — set <code>api_base="https://api.maig.dev/v1"</code> in your completion call</li>
+        <li><strong>aisuite</strong> — configure the OpenAI provider with a custom base URL</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="docs.html">Docs</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+  <script src="assets/nav.js"></script>
+</body>
+</html>

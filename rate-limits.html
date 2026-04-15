@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rate Limits — MAIG Docs</title>
+  <meta name="description" content="MAIG monthly plan limits, per-minute rate limiting, quota rules by plan, and best practices for handling 429 responses." />
+  <link rel="canonical" href="https://maig.dev/rate-limits.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maig.dev/rate-limits.html" />
+  <meta property="og:title" content="Rate Limits — MAIG Docs" />
+  <meta property="og:description" content="MAIG monthly plan limits, per-minute rate limiting, quota rules by plan, and best practices for handling 429 responses." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rate Limits — MAIG Docs" />
+  <meta name="twitter:description" content="MAIG monthly plan limits, per-minute rate limiting, quota rules by plan, and best practices for handling 429 responses." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .limits-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .limits-table th,
+    .limits-table td { padding: 0.6rem 0.75rem; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .limits-table thead th { background: var(--surface); color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .limits-table tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 50%, transparent); }
+    .limits-table td code { font-size: 0.85em; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "Rate Limits — MAIG Docs",
+    "description": "MAIG monthly plan limits, per-minute rate limiting, quota rules by plan, and best practices for handling 429 responses.",
+    "url": "https://maig.dev/rate-limits.html",
+    "publisher": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC", "url": "https://maig.dev" }
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refunds</a>
+      <a href="contact.html">Contact</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <div class="doc-breadcrumb">
+      <a href="docs.html">Docs</a>
+      <span>/</span>
+      Rate Limits
+    </div>
+
+    <div class="page-header">
+      <h1>Rate Limits</h1>
+      <p class="updated">Monthly limits &middot; Per-minute limits &middot; Quota rules</p>
+    </div>
+
+    <p>MAIG enforces two independent layers of limits: a monthly request quota that resets each billing cycle, and a per-minute rate limit that prevents burst traffic from overwhelming providers. Additional per-user and per-route quota rules are available on Pro and Business plans.</p>
+
+    <div class="legal-section">
+      <h2>Monthly Request Limits</h2>
+      <p>Each plan includes a monthly request allowance. The counter resets at the start of each billing cycle.</p>
+
+      <div style="overflow-x:auto; margin: 1rem 0 1.5rem;">
+        <table class="limits-table">
+          <thead>
+            <tr>
+              <th>Plan</th>
+              <th>Monthly Limit</th>
+              <th>What happens when exceeded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Free</strong></td>
+              <td>2,500 requests</td>
+              <td>Hard stop — all subsequent requests return <code>429</code> until the next billing cycle begins.</td>
+            </tr>
+            <tr>
+              <td><strong>Starter</strong></td>
+              <td>15,000 requests</td>
+              <td>Hard stop — all subsequent requests return <code>429</code> until the next billing cycle begins.</td>
+            </tr>
+            <tr>
+              <td><strong>Pro</strong></td>
+              <td>60,000 requests</td>
+              <td>Overage billing — requests beyond the included allowance are billed at the per-request overage rate for your plan.</td>
+            </tr>
+            <tr>
+              <td><strong>Business</strong></td>
+              <td>300,000 requests</td>
+              <td>Overage billing — requests beyond the included allowance are billed at the per-request overage rate for your plan.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Per-Minute Rate Limiting</h2>
+      <p>All plans enforce a <strong>global rate limit of 100 requests per minute</strong> per API key. This limit applies across all routes in a project. Requests that exceed this limit receive an immediate <code>429</code> response and are not queued.</p>
+
+      <h3>Per-route rate limiting (Pro+)</h3>
+      <p>On Pro and Business plans, you can configure independent rate limits per route in the dashboard. Per-route limits support both <strong>minute</strong> and <strong>hour</strong> windows and can be set to any value up to your plan's global limit. This is useful when you want to allocate different throughput budgets to different features or route tiers.</p>
+      <p>Per-route limits are configured in <strong>Dashboard &rarr; Routes &rarr; [select route] &rarr; Rate Limiting</strong>.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Quota Rules (Pro+)</h2>
+      <p>Quota rules let you cap request volume for individual end-users or for specific routes, independently from the global plan limits. Quota rules are available on Pro and Business plans.</p>
+
+      <h3>Per-user quotas</h3>
+      <p>Set a maximum number of requests per day, week, or month for each unique <code>user</code> value passed in the request body. Use case: limit each of your end-users to a fixed number of AI requests per day, preventing a single user from consuming a disproportionate share of your monthly allowance.</p>
+
+      <h3>Per-route quotas</h3>
+      <p>Apply a daily, weekly, or monthly request cap to a specific route, regardless of which user made the request. Use case: protect a high-cost route (e.g. one backed by an expensive model) from unbounded traffic without rate-limiting your entire project.</p>
+
+      <p>Quota rules are configured in <strong>Dashboard &rarr; Routes &rarr; [select route] &rarr; Quotas</strong>. When a quota is exceeded, the gateway returns a <code>429</code> response with a message indicating which quota was triggered.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Rate Limit Response</h2>
+      <p>When any rate limit or quota is exceeded, the gateway responds with HTTP <code>429</code> and the following JSON body:</p>
+      <pre data-lang="json"><code>{
+  "error": {
+    "message": "Rate limit exceeded",
+    "type": "rate_limit_error",
+    "code": 429
+  }
+}</code></pre>
+      <p>Check the <code>Retry-After</code> response header when it is present — it indicates the number of seconds to wait before retrying.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Best Practices</h2>
+      <ul>
+        <li><strong>Use MAIG's built-in retry</strong> — per-route retry can be enabled in the dashboard. The gateway performs exponential backoff with up to 5 retries before returning a <code>502</code>. This handles transient provider errors without any client-side logic.</li>
+        <li><strong>Implement client-side backoff</strong> — when your client receives a <code>429</code>, wait before retrying. A simple strategy: wait <code>2^attempt</code> seconds (1s, 2s, 4s, 8s) with a small random jitter to avoid thundering herd.</li>
+        <li><strong>Monitor your usage</strong> — the dashboard's Usage tab shows request counts by day and by route. Set up email alerts in dashboard settings to be notified before you hit your monthly limit.</li>
+        <li><strong>Upgrade if limits are consistently hit</strong> — if your application regularly hits the monthly limit, upgrading to a higher plan or enabling overage billing (Pro+) will prevent hard stops from affecting your users.</li>
+        <li><strong>Use per-user quotas to protect your plan</strong> — if you expose AI features to end-users, configure per-user quotas so a single user cannot exhaust your monthly allowance.</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="docs.html">Docs</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+  <script src="assets/nav.js"></script>
+</body>
+</html>

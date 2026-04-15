@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference — MAIG Docs</title>
+  <meta name="description" content="Complete MAIG gateway API reference. Endpoint, authentication, request fields, streaming, and error codes." />
+  <link rel="canonical" href="https://maig.dev/api-reference.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maig.dev/api-reference.html" />
+  <meta property="og:title" content="API Reference — MAIG Docs" />
+  <meta property="og:description" content="Complete MAIG gateway API reference. Endpoint, authentication, request fields, streaming, and error codes." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="API Reference — MAIG Docs" />
+  <meta name="twitter:description" content="Complete MAIG gateway API reference. Endpoint, authentication, request fields, streaming, and error codes." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .ref-table th,
+    .ref-table td { padding: 0.6rem 0.75rem; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .ref-table thead th { background: var(--surface); color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ref-table tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 50%, transparent); }
+    .ref-table td code { font-size: 0.85em; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "API Reference — MAIG Docs",
+    "description": "Complete MAIG gateway API reference. Endpoint, authentication, request fields, streaming, and error codes.",
+    "url": "https://maig.dev/api-reference.html",
+    "publisher": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC", "url": "https://maig.dev" }
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refunds</a>
+      <a href="contact.html">Contact</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <div class="doc-breadcrumb">
+      <a href="docs.html">Docs</a>
+      <span>/</span>
+      API Reference
+    </div>
+
+    <div class="page-header">
+      <h1>API Reference</h1>
+      <p class="updated">OpenAI-compatible &middot; REST &middot; /v1/chat/completions</p>
+    </div>
+
+    <p>The MAIG gateway exposes a single chat completions endpoint that is fully compatible with the OpenAI API. Any client or library that works with OpenAI can be pointed at MAIG with a URL and key swap.</p>
+
+    <div class="legal-section">
+      <h2>The Endpoint</h2>
+      <p>All chat completion requests go to:</p>
+      <pre data-lang="text"><code>POST https://api.maig.dev/v1/chat/completions</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Authentication</h2>
+      <p>Pass your MAIG API key in the <code>Authorization</code> header using the <code>Bearer</code> scheme:</p>
+      <pre data-lang="http"><code>Authorization: Bearer maig_your_key_here</code></pre>
+      <div class="doc-note">
+        <strong>API keys</strong> start with <code>maig_</code> and are created in the <a href="dashboard-setup.html">MAIG dashboard</a> under your project settings. Each project has its own key. Requests without a valid key return <code>401</code>.
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Request Fields</h2>
+      <p>The request body is JSON and follows the OpenAI chat completions format. Fields not supported by the selected provider are silently dropped — see the <a href="api-compatibility.html">API Compatibility matrix</a> for the full per-provider breakdown.</p>
+
+      <div style="overflow-x:auto; margin: 1rem 0 1.5rem;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Type</th>
+              <th>Required</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>model</code></td>
+              <td>string</td>
+              <td>Yes</td>
+              <td>Model name or MAIG route name. Model names starting with <code>claude-</code> route to Anthropic; <code>gemini-</code> routes to Google; all others route to OpenAI.</td>
+            </tr>
+            <tr>
+              <td><code>messages</code></td>
+              <td>array</td>
+              <td>Yes</td>
+              <td>Array of message objects with <code>role</code> (<code>system</code>, <code>user</code>, <code>assistant</code>) and <code>content</code> fields.</td>
+            </tr>
+            <tr>
+              <td><code>stream</code></td>
+              <td>boolean</td>
+              <td>No</td>
+              <td>If <code>true</code>, the response is streamed as Server-Sent Events. Defaults to <code>false</code>.</td>
+            </tr>
+            <tr>
+              <td><code>max_tokens</code></td>
+              <td>integer</td>
+              <td>No</td>
+              <td>Maximum number of tokens in the completion. Defaults to 1024 when using Anthropic if omitted.</td>
+            </tr>
+            <tr>
+              <td><code>temperature</code></td>
+              <td>number</td>
+              <td>No</td>
+              <td>Sampling temperature between 0 and 2. Higher values produce more random output. Supported by all providers.</td>
+            </tr>
+            <tr>
+              <td><code>top_p</code></td>
+              <td>number</td>
+              <td>No</td>
+              <td>Nucleus sampling parameter. Supported by all providers.</td>
+            </tr>
+            <tr>
+              <td><code>stop</code></td>
+              <td>string or array</td>
+              <td>No</td>
+              <td>Stop sequences. Supported by OpenAI and Anthropic. <strong>Silently dropped for Google models.</strong></td>
+            </tr>
+            <tr>
+              <td><code>frequency_penalty</code></td>
+              <td>number</td>
+              <td>No</td>
+              <td>Penalizes repeated tokens by frequency. Supported by OpenAI only. <strong>Silently dropped for Anthropic and Google.</strong></td>
+            </tr>
+            <tr>
+              <td><code>presence_penalty</code></td>
+              <td>number</td>
+              <td>No</td>
+              <td>Penalizes tokens that have already appeared. Supported by OpenAI only. <strong>Silently dropped for Anthropic and Google.</strong></td>
+            </tr>
+            <tr>
+              <td><code>seed</code></td>
+              <td>integer</td>
+              <td>No</td>
+              <td>Seed for deterministic sampling. Supported by OpenAI only. <strong>Silently dropped for Anthropic and Google.</strong></td>
+            </tr>
+            <tr>
+              <td><code>response_format</code></td>
+              <td>object</td>
+              <td>No</td>
+              <td>Output format, e.g. <code>{"type": "json_object"}</code>. Fully supported by OpenAI; approximated via system prompt injection for Anthropic; <strong>silently dropped for Google.</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For the full per-provider field support matrix, see the <a href="api-compatibility.html">API Compatibility</a> page.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Example Request (non-streaming)</h2>
+      <pre data-lang="bash"><code>curl https://api.maig.dev/v1/chat/completions \
+  -H "Authorization: Bearer maig_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Example Response</h2>
+      <p>All gateway responses are returned in the standard OpenAI chat completions format, regardless of which provider handled the request.</p>
+      <pre data-lang="json"><code>{
+  "id": "chatcmpl-a1b2c3d4e5f6g7h8i9j0k",
+  "object": "chat.completion",
+  "created": 1735689600,
+  "model": "gpt-4o",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! How can I help you today?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10,
+    "completion_tokens": 9,
+    "total_tokens": 19
+  }
+}</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Streaming</h2>
+      <p>Set <code>"stream": true</code> to receive tokens as Server-Sent Events. Use <code>--no-buffer</code> with curl to see chunks as they arrive:</p>
+      <pre data-lang="bash"><code>curl https://api.maig.dev/v1/chat/completions \
+  --no-buffer \
+  -H "Authorization: Bearer maig_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "stream": true
+  }'</code></pre>
+      <p>The response is a sequence of <code>data:</code> lines, each containing a JSON chunk. The stream ends with <code>data: [DONE]</code>:</p>
+      <pre data-lang="text"><code>data: {"id":"chatcmpl-a1b2c3d4","object":"chat.completion.chunk","created":1735689600,"model":"gpt-4o","choices":[{"index":0,"delta":{"role":"assistant","content":"Hello"},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-a1b2c3d4","object":"chat.completion.chunk","created":1735689600,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"! How"},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-a1b2c3d4","object":"chat.completion.chunk","created":1735689600,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":" can I help?"},"finish_reason":"stop"}]}
+
+data: [DONE]</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Using Claude</h2>
+      <p>Pass any Anthropic model name — model names starting with <code>claude-</code> are automatically routed to Anthropic. The request and response format remain identical.</p>
+      <pre data-lang="bash"><code>curl https://api.maig.dev/v1/chat/completions \
+  -H "Authorization: Bearer maig_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-3-5-sonnet-20241022",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Using Gemini</h2>
+      <p>Pass any Google model name — model names starting with <code>gemini-</code> are automatically routed to Google. The request and response format remain identical.</p>
+      <pre data-lang="bash"><code>curl https://api.maig.dev/v1/chat/completions \
+  -H "Authorization: Bearer maig_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-2.0-flash",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Error Codes</h2>
+      <p>The gateway returns standard HTTP status codes. Error responses include a JSON body with an <code>error</code> object.</p>
+
+      <div style="overflow-x:auto; margin: 1rem 0 1.5rem;">
+        <table class="ref-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Meaning</th>
+              <th>What to do</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>401</code></td>
+              <td>Invalid or missing API key</td>
+              <td>Check that the <code>Authorization</code> header is present and the key starts with <code>maig_</code>. Verify the key is active in the dashboard.</td>
+            </tr>
+            <tr>
+              <td><code>402</code></td>
+              <td>Subscription inactive or payment failed</td>
+              <td>Check your billing status in the dashboard. Update your payment method or reactivate your subscription.</td>
+            </tr>
+            <tr>
+              <td><code>422</code></td>
+              <td>Malformed request body</td>
+              <td>Inspect the error message for the specific field that failed validation. Ensure <code>model</code> and <code>messages</code> are present and correctly typed.</td>
+            </tr>
+            <tr>
+              <td><code>429</code></td>
+              <td>Rate limit or monthly plan limit exceeded</td>
+              <td>Back off and retry with exponential delay for rate limits. If you are consistently hitting your monthly limit, consider upgrading your plan. See <a href="rate-limits.html">Rate Limits</a>.</td>
+            </tr>
+            <tr>
+              <td><code>502</code></td>
+              <td>All configured providers failed</td>
+              <td>The primary provider and any fallback providers all returned errors. Check provider status pages. The gateway retried automatically — this error means all attempts were exhausted.</td>
+            </tr>
+            <tr>
+              <td><code>503</code></td>
+              <td>No provider configured for this model</td>
+              <td>Your project does not have a provider configured that supports the requested model. Add the appropriate provider credentials in the dashboard.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="docs.html">Docs</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+  <script src="assets/nav.js"></script>
+</body>
+</html>
