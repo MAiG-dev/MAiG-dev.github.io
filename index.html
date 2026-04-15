@@ -350,6 +350,11 @@
           <h3>You're flying blind in production</h3>
           <p>Without logging, you don't know which requests are failing, how much each feature costs, or why your AI responses are slow.</p>
         </div>
+        <div class="problem-item">
+          <div class="problem-icon">✏️</div>
+          <h3>Changing a prompt means shipping a release</h3>
+          <p>Prompts baked into the binary can't be updated without going through App Store review. Every tweak, every fix, every tone adjustment waits on a release cycle.</p>
+        </div>
       </div>
     </section>
 
@@ -435,7 +440,7 @@ client.streamText("Tell me a story").collect { token -&gt;
       </div>
     </section>
 
-    <section>
+    <section id="pricing">
       <h2>Pricing</h2>
       <p>All plans include the dashboard, iOS and Android SDKs, and request logging. Upgrade or cancel anytime.</p>
       <div class="pricing-grid">
@@ -446,6 +451,7 @@ client.streamText("Tell me a story").collect { token -&gt;
           <ul>
             <li>2,500 requests / month</li>
             <li>1 project</li>
+            <li>3 prompt sets</li>
             <li>Dashboard access</li>
             <li>Request logs (3 days)</li>
             <li>Hard cap — no overages</li>
@@ -461,6 +467,7 @@ client.streamText("Tell me a story").collect { token -&gt;
           <ul>
             <li>15,000 requests / month</li>
             <li>2 projects</li>
+            <li>10 prompt sets</li>
             <li>Dashboard access</li>
             <li>Request logs (14 days)</li>
             <li>Retry on failure (up to 1 retry)</li>
@@ -477,6 +484,7 @@ client.streamText("Tell me a story").collect { token -&gt;
           <ul>
             <li>60,000 requests / month</li>
             <li>5 projects</li>
+            <li>50 prompt sets</li>
             <li>Dashboard access</li>
             <li>Request logs (30 days)</li>
             <li>Retry on failure (up to 3 retries)</li>
@@ -492,6 +500,7 @@ client.streamText("Tell me a story").collect { token -&gt;
           <ul>
             <li>300,000 requests / month</li>
             <li>15 projects</li>
+            <li>Unlimited prompt sets</li>
             <li>Dashboard access</li>
             <li>Request logs (90 days)</li>
             <li>Retry on failure (up to 5 retries)</li>

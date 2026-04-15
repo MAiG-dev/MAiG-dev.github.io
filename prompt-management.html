@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Management — MAIG Docs</title>
+  <meta name="description" content="Store, version, and sync prompts server-side with MAIG. Update prompts without shipping a new app release." />
+  <link rel="canonical" href="https://maig.dev/prompt-management.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maig.dev/prompt-management.html" />
+  <meta property="og:title" content="Prompt Management — MAIG Docs" />
+  <meta property="og:description" content="Store, version, and sync prompts server-side with MAIG. Update prompts without shipping a new app release." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Prompt Management — MAIG Docs" />
+  <meta name="twitter:description" content="Store, version, and sync prompts server-side with MAIG. Update prompts without shipping a new app release." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "Prompt Management — MAIG Docs",
+    "description": "Store, version, and sync prompts server-side with MAIG. Update prompts without shipping a new app release.",
+    "url": "https://maig.dev/prompt-management.html",
+    "publisher": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC", "url": "https://maig.dev" }
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="refund.html">Refunds</a>
+      <a href="contact.html">Contact</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <div class="doc-breadcrumb">
+      <a href="docs.html">Docs</a>
+      <span>/</span>
+      Prompt Management
+    </div>
+
+    <div class="page-header">
+      <h1>Prompt Management</h1>
+      <p class="updated">iOS SDK &middot; Android SDK &middot; Dashboard</p>
+    </div>
+
+    <p>Prompt Management lets you store your prompts on the MAIG server and sync them to your app on demand — no app release required to update a prompt. Prompts are versioned, diffed efficiently on the server, and cached locally on device so they are always available at inference time without a network round-trip.</p>
+
+    <div class="legal-section">
+      <h2>How it works</h2>
+      <ol class="doc-steps">
+        <li>
+          <div class="step-body">
+            <h3>Create prompts in the dashboard</h3>
+            <p>Go to <strong>Prompts</strong> in the dashboard sidebar. Create a named prompt set and add one or more messages. Each message has a <code>role</code> (<code>system</code>, <code>user</code>, or <code>assistant</code>) and a <code>content</code> string — the same format as the OpenAI messages array.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <h3>Sync at app launch</h3>
+            <p>Call <code>PromptStore.sync()</code> when your app starts. The SDK sends a hash map of everything it already has cached; the server returns only the prompts that have changed since the last sync. On a cold start the full set is returned; on subsequent syncs only the delta is transmitted.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <h3>Use at inference time</h3>
+            <p>Call <code>getPrompt(named:)</code> (iOS) or <code>getPrompt(name)</code> (Android) to retrieve the cached messages for a prompt by name. This is a synchronous, in-memory read — no network call. Prepend or append the messages to your conversation before calling <code>generateText</code> or <code>streamText</code>.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="legal-section">
+      <h2>Prompt sets</h2>
+      <p>A <strong>prompt set</strong> is the unit of storage. It has:</p>
+      <ul>
+        <li>A human-readable <strong>name</strong> — lowercase letters, numbers, and hyphens, up to 64 characters. Names are unique within a project and <strong>immutable after creation</strong>. To rename, delete and recreate.</li>
+        <li>An ordered array of <strong>messages</strong>, each with a <code>role</code> and <code>content</code>.</li>
+        <li>A <strong>version</strong> integer that increments on every save.</li>
+        <li>A <strong>content hash</strong> (SHA-256 of the messages) used for efficient delta sync.</li>
+      </ul>
+      <p>Total message content per prompt set is capped at <strong>32 KB</strong>. The number of prompt sets per project depends on your plan — see the <a href="index.html#pricing">pricing page</a> for limits. Exceeding the content cap returns <code>400 prompt_too_large</code>; exceeding your plan's prompt count returns <code>402 prompt_limit_reached</code>.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>iOS — PromptStore</h2>
+
+      <h3>Initialization</h3>
+      <p>Create a <code>PromptStore</code> with the same project API key used for <code>AIGatewayClient</code>. You typically create one instance at the app level:</p>
+      <pre data-lang="swift"><code>import AIGatewaySDK
+
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY")</code></pre>
+
+      <h3>Syncing</h3>
+      <p>Call <code>sync()</code> once at app launch. It fetches any changed prompts and updates the local cache atomically:</p>
+      <pre data-lang="swift"><code>// In your App or AppDelegate
+Task {
+    do {
+        try await store.sync()
+    } catch {
+        // Non-fatal — cached prompts from the last successful sync are still available
+        print("Prompt sync failed: \(error)")
+    }
+}</code></pre>
+      <div class="doc-note">
+        <strong>Offline resilience:</strong> The cache is persisted to the app's Application Support directory and survives app restarts and low-storage purges. If <code>sync()</code> fails (e.g. no network), <code>getPrompt(named:)</code> will still return the last successfully synced version.
+      </div>
+
+      <h3>Using prompts at inference time</h3>
+      <p>Retrieve the cached messages for a prompt by name and prepend them to your conversation:</p>
+      <pre data-lang="swift"><code>// getPrompt(named:) is a synchronous in-memory read — no network call
+let storedMessages = store.getPrompt(named: "support-bot-system") ?? []
+
+let userMessage = Message.user("My order hasn't arrived.")
+let messages = storedMessages + [userMessage]
+
+let result = try await client.generateText(messages: messages)</code></pre>
+      <p><code>getPrompt(named:)</code> returns <code>nil</code> if the named prompt does not exist or <code>sync()</code> has never completed successfully. Always provide a fallback (e.g. an empty array or a hardcoded default) for the first launch before a sync has occurred.</p>
+
+      <h3>API reference</h3>
+      <pre data-lang="swift"><code>public final class PromptStore {
+
+    /// Initialize with your project API key.
+    public init(apiKey: String, baseURL: URL = URL(string: "https://api.maig.dev")!)
+
+    /// Fetch changed prompts from the server and update the local cache.
+    /// Safe to call at app launch or on demand.
+    public func sync() async throws
+
+    /// Return the cached messages for a prompt by name.
+    /// Returns nil if the prompt has never been synced.
+    public func getPrompt(named name: String) -> [Message]?
+}</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Android — PromptStore</h2>
+
+      <h3>Initialization</h3>
+      <p>Create a <code>PromptStore</code> with your project API key and an Android <code>Context</code>. A single instance per project is sufficient:</p>
+      <pre data-lang="kotlin"><code>import com.maig.sdk.PromptStore
+
+val store = PromptStore(
+    apiKey = "maig_YOUR_PROJECT_KEY",
+    context = applicationContext,
+)</code></pre>
+
+      <h3>Syncing</h3>
+      <p><code>sync()</code> is a suspend function. Call it from a coroutine at app launch:</p>
+      <pre data-lang="kotlin"><code>// In Application.onCreate() or a ViewModel init block
+lifecycleScope.launch {
+    try {
+        store.sync()
+    } catch (e: Exception) {
+        // Non-fatal — last synced cache is still available
+        Log.w("PromptStore", "Sync failed: ${e.message}")
+    }
+}</code></pre>
+      <div class="doc-note">
+        <strong>Offline resilience:</strong> The cache is persisted to the app's internal files directory (<code>filesDir</code>) and survives process restarts. If <code>sync()</code> fails, <code>getPrompt()</code> returns the last successfully synced version.
+      </div>
+
+      <h3>Using prompts at inference time</h3>
+      <pre data-lang="kotlin"><code>// getPrompt() is a synchronous in-memory read — no network call
+val storedMessages = store.getPrompt("support-bot-system") ?: emptyList()
+
+val messages = storedMessages + Message(role = "user", content = "My order hasn't arrived.")
+val result = client.generateText(messages = messages)</code></pre>
+      <p><code>getPrompt()</code> returns <code>null</code> if the named prompt does not exist or <code>sync()</code> has never completed successfully. Provide a fallback for the first launch before a sync has occurred.</p>
+
+      <h3>API reference</h3>
+      <pre data-lang="kotlin"><code>class PromptStore(
+    apiKey: String,
+    context: Context,
+    baseUrl: String = "https://api.maig.dev",
+) {
+    /** Fetch changed prompts from the server and update the local cache. */
+    suspend fun sync()
+
+    /** Return the cached messages for a prompt by name, or null if not yet synced. */
+    fun getPrompt(name: String): List&lt;Message&gt;?
+}</code></pre>
+    </div>
+
+    <div class="legal-section">
+      <h2>Dashboard: managing prompts</h2>
+      <p>All prompt management is done from the <strong>Prompts</strong> page in the dashboard:</p>
+      <ul>
+        <li><strong>Create</strong> — enter a name and at least one message. The name is permanent; use hyphens to separate words (e.g. <code>support-bot-system</code>).</li>
+        <li><strong>Edit</strong> — modify message roles or content and click <strong>Save</strong>. The version increments and the content hash updates. Client apps receive the new content on their next <code>sync()</code> call.</li>
+        <li><strong>Delete</strong> — removes the prompt set. Client apps remove it from their local cache on the next <code>sync()</code> call.</li>
+      </ul>
+      <div class="doc-note">
+        <strong>Prompt names are immutable.</strong> Once a prompt set is created, its name cannot be changed. To rename, delete the old prompt and create a new one with the desired name. Clients will receive the deletion and the new prompt on their next sync.
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Variable substitution</h2>
+      <p>Embed <code>{{VARIABLE_NAME}}</code> placeholders anywhere in a message's <code>content</code> field. At inference time, pass a variables map to <code>getPrompt</code> and the SDK returns new <code>Message</code> objects with the placeholders replaced — the cached template is never modified.</p>
+      <p>Variable names must start with a letter or underscore and contain only letters, digits, and underscores (e.g. <code>USER_NAME</code>, <code>productTitle</code>). Names are case-sensitive. If a placeholder key is missing from the supplied map, it is left verbatim in the content so the mismatch is immediately visible.</p>
+
+      <h3>iOS</h3>
+      <pre data-lang="swift"><code>// Store the template in the dashboard:
+// "You are a support agent for {{PRODUCT}}. Greet {{USER}} warmly."
+
+if let result = store.getPrompt(named: "support-greeting", variables: [
+    "PRODUCT": "Acme Store",
+    "USER": username,
+]) {
+    // result.messages — substituted, ready to pass to generateText
+    // result.missingVariables — placeholders that had no supplied value
+    // result.extraVariables  — supplied keys that didn't match any placeholder
+    if !result.missingVariables.isEmpty {
+        print("Missing variables:", result.missingVariables)
+    }
+    let messages = result.messages + [Message.user("I need help with my order.")]
+    let response = try await client.generateText(messages: messages)
+}</code></pre>
+      <p>The no-variables <code>getPrompt(named:)</code> overload is unchanged and returns <code>[Message]?</code> directly.</p>
+
+      <h3>Android</h3>
+      <pre data-lang="kotlin"><code>val result = store.getPrompt("support-greeting", mapOf(
+    "PRODUCT" to "Acme Store",
+    "USER" to username,
+))
+
+if (result != null) {
+    // result.messages         — substituted messages
+    // result.missingVariables — placeholders with no supplied value
+    // result.extraVariables   — supplied keys that matched no placeholder
+    if (result.missingVariables.isNotEmpty()) {
+        Log.w("PromptStore", "Missing variables: ${result.missingVariables}")
+    }
+    val messages = result.messages + Message(role = "user", content = "I need help.")
+    val response = client.generateText(messages = messages)
+}</code></pre>
+      <p>The single-argument <code>getPrompt(name)</code> overload is unchanged and returns <code>List&lt;Message&gt;?</code> directly.</p>
+
+      <div class="doc-note">
+        <strong>Client-side only.</strong> Variable substitution happens entirely on-device. The MAIG server stores and returns raw template strings — it has no knowledge of variable names or values. This means substitution never adds a network round-trip and sensitive runtime values (user IDs, session tokens) are never transmitted to the server.
+      </div>
+    </div>
+
+    <div class="legal-section">
+      <h2>Sync endpoint reference</h2>
+      <p>The SDK calls this endpoint internally. You do not need to call it directly.</p>
+      <pre data-lang="text"><code>POST https://api.maig.dev/v1/prompts/sync</code></pre>
+      <p><strong>Headers:</strong> <code>Authorization: Bearer &lt;project-api-key&gt;</code>, <code>Content-Type: application/json</code></p>
+      <p><strong>Body:</strong> JSON object with an optional <code>hashes</code> field — a map of <code>{ [name]: contentHash }</code> representing what the client currently has. Omit <code>hashes</code> (or send an empty object) on first sync to receive all prompts.</p>
+      <pre data-lang="json"><code>{ "hashes": { "support-bot-system": "a3f8...", "onboarding-flow": "d4e5..." } }</code></pre>
+      <p><strong>Response:</strong></p>
+      <pre data-lang="json"><code>{
+  "prompts": [
+    {
+      "name": "support-bot-system",
+      "version": 3,
+      "contentHash": "a3f8...",
+      "messages": [
+        { "role": "system", "content": "You are a helpful support agent." }
+      ]
+    }
+  ],
+  "deletedNames": ["old-prompt"]
+}</code></pre>
+      <p>Only prompts whose <code>contentHash</code> differs from the client's cached hash are included in <code>prompts</code>. <code>deletedNames</code> lists any names the client sent in <code>hashes</code> that no longer exist on the server.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Next steps</h2>
+      <ul>
+        <li>See the <a href="ios-sdk.html">iOS SDK</a> or <a href="android-sdk.html">Android SDK</a> guide for full installation and usage instructions</li>
+        <li>Questions? Email <a href="mailto:support@maig.dev">support@maig.dev</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="docs.html">Docs</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+  <script src="assets/nav.js"></script>
+</body>
+</html>

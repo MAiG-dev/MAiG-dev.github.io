@@ -212,10 +212,29 @@ val response = client.generateText(
     </div>
 
     <div class="legal-section">
+      <h2>Prompt Management</h2>
+      <p>The SDK includes <code>PromptStore</code> — a lightweight class that syncs server-managed prompts to a local cache on device. Update prompts in the dashboard and your app picks up the change on its next <code>sync()</code> call, no app release required.</p>
+
+      <pre data-lang="kotlin"><code>val store = PromptStore(apiKey = "maig_YOUR_PROJECT_KEY", context = applicationContext)
+
+// At app launch — fetches only changed prompts
+store.sync()
+
+// At inference time — synchronous in-memory read, no network call
+val storedMessages = store.getPrompt("support-bot-system") ?: emptyList()
+val messages = storedMessages + Message(role = "user", content = "My order hasn't arrived.")
+
+val result = client.generateText(messages = messages)</code></pre>
+
+      <p>See the <a href="prompt-management.html">Prompt Management guide</a> for full details on creating prompts in the dashboard, handling the first-launch case, and the complete API reference.</p>
+    </div>
+
+    <div class="legal-section">
       <h2>Next steps</h2>
       <ul>
         <li>Configure fallback routing in the <a href="dashboard-setup.html">dashboard</a> to improve resilience when a provider is unavailable</li>
         <li>View per-request logs, token counts, and latency in the dashboard's <strong>Logs</strong> tab</li>
+        <li>Manage prompts server-side with <a href="prompt-management.html">Prompt Management</a></li>
         <li>Questions? Email <a href="mailto:support@maig.dev">support@maig.dev</a></li>
       </ul>
     </div>

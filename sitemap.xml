@@ -26,6 +26,11 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://maig.dev/prompt-management.html</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://maig.dev/contact.html</loc>
     <priority>0.5</priority>
     <changefreq>monthly</changefreq>

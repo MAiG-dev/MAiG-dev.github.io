@@ -170,10 +170,29 @@ for try await token in client.streamText(prompt: "Tell me a story about a robot.
     </div>
 
     <div class="legal-section">
+      <h2>Prompt Management</h2>
+      <p>The SDK includes <code>PromptStore</code> — a lightweight class that syncs server-managed prompts to a local cache on device. Update prompts in the dashboard and your app picks up the change on its next <code>sync()</code> call, no app release required.</p>
+
+      <pre data-lang="swift"><code>let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY")
+
+// At app launch — fetches only changed prompts
+try await store.sync()
+
+// At inference time — synchronous in-memory read, no network call
+let storedMessages = store.getPrompt(named: "support-bot-system") ?? []
+let messages = storedMessages + [Message.user("My order hasn't arrived.")]
+
+let result = try await client.generateText(messages: messages)</code></pre>
+
+      <p>See the <a href="prompt-management.html">Prompt Management guide</a> for full details on creating prompts in the dashboard, handling the first-launch case, and the complete API reference.</p>
+    </div>
+
+    <div class="legal-section">
       <h2>Next steps</h2>
       <ul>
         <li>Configure fallback routing in the <a href="dashboard-setup.html">dashboard</a> to improve resilience when a provider is unavailable</li>
         <li>View per-request logs, token counts, and latency in the dashboard's <strong>Logs</strong> tab</li>
+        <li>Manage prompts server-side with <a href="prompt-management.html">Prompt Management</a></li>
         <li>Questions? Email <a href="mailto:support@maig.dev">support@maig.dev</a></li>
       </ul>
     </div>
