@@ -82,7 +82,7 @@
         <li>
           <div class="step-body">
             <h3>Add provider credentials</h3>
-            <p>Open the <strong>Providers</strong> tab inside your project. Click <strong>Add provider</strong>, select OpenAI, Anthropic, or Google, and paste in your provider API key. MAIG encrypts and stores it server-side — the raw key is never returned to the client after saving.</p>
+            <p>Open the <strong>Providers</strong> tab inside your project. Click <strong>Add provider</strong>, select OpenAI, Anthropic, or Google, and paste in your provider API key. MAIG encrypts and stores it server-side — your mobile app never holds your provider credentials, only a scoped <code>maig_...</code> project key.</p>
             <ul>
               <li>OpenAI keys are available at <a href="https://platform.openai.com/api-keys" rel="noopener">platform.openai.com/api-keys</a></li>
               <li>Anthropic keys are available at <a href="https://console.anthropic.com/settings/keys" rel="noopener">console.anthropic.com/settings/keys</a></li>
