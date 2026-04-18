@@ -324,9 +324,13 @@
 
     <div class="hero-content">
       <div class="badge">Mobile AI Gateway</div>
-      <h1>Ship AI in your app quickly and safely. Your backend is already built.</h1>
+      <h1>You shouldn't ship AI in your mobile app without a backend.</h1>
+      <p class="audience-label">Built for iOS and Android developers who want to ship AI features without managing backend infrastructure.</p>
       <p class="subtitle">One SDK. Encrypted key management. Multi-provider routing. Everything you'd build yourself, already built.</p>
-      <a href="https://app.maig.dev" class="btn">Get started free</a>
+      <div class="hero-cta-group">
+        <a href="https://app.maig.dev" class="btn">Get started free</a>
+        <p class="cta-note">2,500 requests/month free — no credit card required</p>
+      </div>
     </div>
   </section>
 
@@ -359,6 +363,15 @@
     </section>
 
     <section>
+      <h2>Built by a developer, for developers.</h2>
+      <div class="founder-note-card">
+        <p class="founder-quote">"I built MAIG because I needed it. Managing provider keys across apps, switching models without shipping an update, getting visibility into what my AI was actually doing in production — none of that existed in a form that worked for native mobile. So I built it."</p>
+        <div class="founder-byline">— Luke, founder of MAIG</div>
+        <p class="founder-cta-text">Building something similar and hitting the same walls? <a href="mailto:lukedavis@maig.dev">I'd like to hear about it.</a></p>
+      </div>
+    </section>
+
+    <section>
       <h2>Up and running in 15 minutes.</h2>
       <ol class="doc-steps">
         <li>
@@ -370,7 +383,7 @@
         <li>
           <div class="step-body">
             <h3>Connect your providers</h3>
-            <p>Add your OpenAI or Anthropic API keys in the dashboard. They're encrypted and stored server-side — never in your app.</p>
+            <p>Add your OpenAI or Anthropic API keys in the dashboard. MAIG encrypts and stores them server-side — your mobile app never holds your provider credentials, only a scoped MAIG project key.</p>
           </div>
         </li>
         <li>
@@ -424,8 +437,8 @@ client.streamText("Tell me a story").collect { token -&gt;
         </div>
         <div class="feature">
           <div class="feature-icon">🔑</div>
-          <h3>Encrypted key storage</h3>
-          <p>Your provider API keys are encrypted at rest and never leave the server. Your app only ever holds a MAIG project key.</p>
+          <h3>Keys off the device</h3>
+          <p>Your provider API keys are encrypted and held server-side by MAIG — not in your app binary where users could extract them. Your mobile app holds only a scoped MAIG project key. Same trust model as Stripe: credentials live with the infrastructure, not with your users.</p>
         </div>
         <div class="feature">
           <div class="feature-icon">📊</div>
@@ -458,6 +471,7 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li class="plan-no">No retry on failure</li>
             <li class="plan-no">No provider fallback</li>
             <li class="plan-no">No request throttling</li>
+            <li class="plan-no">No prompt version history</li>
           </ul>
         </div>
         <div class="plan">
@@ -471,6 +485,7 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li>Dashboard access</li>
             <li>Request logs (14 days)</li>
             <li>Retry on failure (up to 1 retry)</li>
+            <li>Prompt version history (last 5)</li>
             <li>Overage: $0.0008 / request</li>
             <li class="plan-no">No provider fallback</li>
             <li class="plan-no">No request throttling</li>
@@ -488,6 +503,7 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li>Dashboard access</li>
             <li>Request logs (30 days)</li>
             <li>Retry on failure (up to 3 retries)</li>
+            <li>Prompt version history (last 10)</li>
             <li>Provider fallback</li>
             <li>Request throttling &amp; quotas</li>
             <li>Overage: $0.0008 / request</li>
@@ -504,6 +520,7 @@ client.streamText("Tell me a story").collect { token -&gt;
             <li>Dashboard access</li>
             <li>Request logs (90 days)</li>
             <li>Retry on failure (up to 5 retries)</li>
+            <li>Prompt version history (last 15)</li>
             <li>Provider fallback</li>
             <li>Request throttling &amp; quotas</li>
             <li>Overage: $0.0008 / request</li>
@@ -516,15 +533,6 @@ client.streamText("Tell me a story").collect { token -&gt;
     <section>
       <h2>Supported providers</h2>
       <p>MAIG currently supports routing to <strong>OpenAI</strong> (GPT-4o, GPT-4, GPT-3.5), <strong>Anthropic</strong> (Claude 3.5 Sonnet, Claude 3 Haiku, Claude 3 Opus), and <strong>Google</strong> (Gemini 2.0 Flash, Gemini 1.5 Pro).</p>
-    </section>
-
-    <section>
-      <h2>Built by a developer, for developers.</h2>
-      <div class="founder-note-card">
-        <p class="founder-quote">"I built MAIG because I needed it. Managing provider keys across apps, switching models without shipping an update, getting visibility into what my AI was actually doing in production — none of that existed in a form that worked for native mobile. So I built it."</p>
-        <div class="founder-byline">— Luke, founder of MAIG</div>
-        <p class="founder-cta-text">Building something similar and hitting the same walls? <a href="mailto:lukedavis@maig.dev">I'd like to hear about it.</a></p>
-      </div>
     </section>
 
     <section class="cta-section">

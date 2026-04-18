@@ -210,6 +210,35 @@ val result = client.generateText(messages = messages)</code></pre>
     </div>
 
     <div class="legal-section">
+      <h2>Version history &amp; activation</h2>
+      <p>On Starter, Pro, and Business plans, every save is automatically snapshotted. You can view the full history of a prompt, preview any past version, and activate an older version to make it live — without shipping a new app release.</p>
+
+      <h3>Viewing history</h3>
+      <p>Click <strong>History</strong> on any prompt card to open the version history panel. Each entry shows the version number and the date it was saved.</p>
+
+      <h3>Previewing a version</h3>
+      <p>Click <strong>Preview</strong> next to any version to view its messages in read-only mode. No changes are made until you explicitly activate a version.</p>
+
+      <h3>Activating a version</h3>
+      <p>Click <strong>Activate</strong> (from the history list or from within the preview) and confirm the prompt. Activating creates a <em>new</em> version with the content of the selected snapshot — it does not rewrite history. For example, if the current version is v3 and you activate v1, the prompt becomes v4 with v1's content. You can then edit it further to create v5.</p>
+      <p>After activation, client apps receive the updated content on their next <code>sync()</code> call, exactly as they would after a normal save.</p>
+
+      <h3>Version retention by plan</h3>
+      <table class="doc-table">
+        <thead>
+          <tr><th>Plan</th><th>Version history</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Free</td><td>Not available</td></tr>
+          <tr><td>Starter</td><td>Last 5 versions</td></tr>
+          <tr><td>Pro</td><td>Last 10 versions</td></tr>
+          <tr><td>Business</td><td>Last 15 versions</td></tr>
+        </tbody>
+      </table>
+      <p>Once the retention limit is reached, the oldest snapshot is automatically removed when a new one is recorded. The active version of a prompt is never affected — only history snapshots are pruned.</p>
+    </div>
+
+    <div class="legal-section">
       <h2>Variable substitution</h2>
       <p>Embed <code>{{VARIABLE_NAME}}</code> placeholders anywhere in a message's <code>content</code> field. At inference time, pass a variables map to <code>getPrompt</code> and the SDK returns new <code>Message</code> objects with the placeholders replaced — the cached template is never modified.</p>
       <p>Variable names must start with a letter or underscore and contain only letters, digits, and underscores (e.g. <code>USER_NAME</code>, <code>productTitle</code>). Names are case-sensitive. If a placeholder key is missing from the supplied map, it is left verbatim in the content so the mismatch is immediately visible.</p>
