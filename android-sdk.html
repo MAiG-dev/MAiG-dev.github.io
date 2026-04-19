@@ -242,19 +242,29 @@ val result = client.generateText(messages = messages)</code></pre>
       <h3>Version pinning</h3>
       <p>Pin a prompt to a major version so your app only ever receives minor updates within that major. A major bump is never delivered until you explicitly move the pin — protecting you from broken variable substitution at runtime.</p>
 
-      <h4>Option A — JSON config file</h4>
-      <p>Add <code>maig-prompts.json</code> to your Android project's <code>src/main/assets/</code> folder:</p>
+      <h4>Option A — JSON config file (default location)</h4>
+      <p>Add <code>maig-prompts.json</code> to your Android project's <code>src/main/assets/</code> folder. The SDK looks for this file automatically — no extra code needed:</p>
       <pre data-lang="json"><code>{
   "pinned": {
     "support-bot": 1,
     "onboarding-flow": 2
   }
 }</code></pre>
-      <pre data-lang="kotlin"><code>// Pass the asset filename to the constructor
+      <pre data-lang="kotlin"><code>// SDK loads maig-prompts.json from assets automatically
+val store = PromptStore(apiKey = "maig_YOUR_PROJECT_KEY", context = applicationContext)
+
+// Custom filename: override the default
 val store = PromptStore(
     apiKey = "maig_YOUR_PROJECT_KEY",
     context = applicationContext,
-    configFile = "maig-prompts.json",
+    configFile = "my-config.json",
+)
+
+// Pass null to disable config file loading entirely
+val store = PromptStore(
+    apiKey = "maig_YOUR_PROJECT_KEY",
+    context = applicationContext,
+    configFile = null,
 )</code></pre>
 
       <h4>Option B — Runtime API</h4>

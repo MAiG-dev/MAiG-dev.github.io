@@ -200,16 +200,22 @@ let result = try await client.generateText(messages: messages)</code></pre>
       <h3>Version pinning</h3>
       <p>Pin a prompt to a major version so your app only ever receives minor updates within that major. A major bump is never delivered until you explicitly move the pin — protecting you from broken variable substitution at runtime.</p>
 
-      <h4>Option A — JSON config file</h4>
-      <p>Add <code>maig-prompts.json</code> to your Xcode project bundle:</p>
+      <h4>Option A — JSON config file (default location)</h4>
+      <p>Add <code>maig-prompts.json</code> to your Xcode project bundle. The SDK looks for this file automatically — no extra code needed:</p>
       <pre data-lang="json"><code>{
   "pinned": {
     "support-bot": 1,
     "onboarding-flow": 2
   }
 }</code></pre>
-      <pre data-lang="swift"><code>// Pass the filename (without .json) to the initializer
-let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: "maig-prompts")</code></pre>
+      <pre data-lang="swift"><code>// SDK loads maig-prompts.json from the bundle automatically
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY")
+
+// Custom filename (without .json): override the default
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: "my-config")
+
+// Pass nil to disable config file loading entirely
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: nil)</code></pre>
 
       <h4>Option B — Runtime API</h4>
       <pre data-lang="swift"><code>let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY")

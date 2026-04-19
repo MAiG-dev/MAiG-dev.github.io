@@ -283,7 +283,7 @@ val result = client.generateText(messages = messages)</code></pre>
       <p>There are two ways to configure pinning — they can be combined (runtime calls take precedence over the file).</p>
 
       <h4>JSON config file (recommended for most apps)</h4>
-      <p>Create a file named <code>maig-prompts.json</code> and add it to your app's bundle (Xcode) or <code>src/main/assets/</code> folder (Android):</p>
+      <p>Create a file named <code>maig-prompts.json</code> and add it to your app's bundle (Xcode) or <code>src/main/assets/</code> folder (Android). <strong>The SDK looks for this file by default</strong> — no extra configuration needed.</p>
       <pre data-lang="json"><code>{
   "pinned": {
     "support-bot": 1,
@@ -293,22 +293,38 @@ val result = client.generateText(messages = messages)</code></pre>
       <p>The key is the prompt name; the value is the major version to pin to. This file is version-controlled alongside your code, making it easy to review pin changes in pull requests.</p>
 
       <h4>iOS</h4>
-      <pre data-lang="swift"><code>// Load pins from bundle file
-let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: "maig-prompts")
+      <pre data-lang="swift"><code>// No configFile argument needed — SDK loads maig-prompts.json from the bundle automatically
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY")
 
-// Or pin at runtime (overrides the file)
+// Custom filename: pass the name without the .json extension
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: "my-custom-config")
+
+// Disable config file loading entirely
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: nil)
+
+// Pin at runtime (overrides the file)
 store.pin("support-bot", majorVersion: 1)
 try await store.sync()</code></pre>
 
       <h4>Android</h4>
-      <pre data-lang="kotlin"><code>// Load pins from assets file
+      <pre data-lang="kotlin"><code>// No configFile argument needed — SDK loads maig-prompts.json from assets automatically
+val store = PromptStore(apiKey = "maig_YOUR_PROJECT_KEY", context = applicationContext)
+
+// Custom filename
 val store = PromptStore(
     apiKey = "maig_YOUR_PROJECT_KEY",
     context = applicationContext,
-    configFile = "maig-prompts.json",
+    configFile = "my-custom-config.json",
 )
 
-// Or pin at runtime (overrides the file)
+// Disable config file loading entirely
+val store = PromptStore(
+    apiKey = "maig_YOUR_PROJECT_KEY",
+    context = applicationContext,
+    configFile = null,
+)
+
+// Pin at runtime (overrides the file)
 store.pin("support-bot", majorVersion = 1)
 store.sync()</code></pre>
 
