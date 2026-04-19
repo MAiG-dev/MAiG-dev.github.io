@@ -90,10 +90,38 @@
       <ul>
         <li>A human-readable <strong>name</strong> — lowercase letters, numbers, and hyphens, up to 64 characters. Names are unique within a project and <strong>immutable after creation</strong>. To rename, delete and recreate.</li>
         <li>An ordered array of <strong>messages</strong>, each with a <code>role</code> and <code>content</code>.</li>
-        <li>A <strong>version</strong> integer that increments on every save.</li>
+        <li>A <strong>semantic version</strong> (e.g. <code>v1.2</code>) — major and minor, described below.</li>
         <li>A <strong>content hash</strong> (SHA-256 of the messages) used for efficient delta sync.</li>
       </ul>
       <p>Total message content per prompt set is capped at <strong>32 KB</strong>. The number of prompt sets per project depends on your plan — see the <a href="index.html#pricing">pricing page</a> for limits. Exceeding the content cap returns <code>400 prompt_too_large</code>; exceeding your plan's prompt count returns <code>402 prompt_limit_reached</code>.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Semantic versioning</h2>
+      <p>Every prompt is versioned as <strong>major.minor</strong>, starting at <strong>v1.0</strong>. The MAIG server automatically determines which kind of bump to apply each time you save:</p>
+
+      <table class="doc-table">
+        <thead>
+          <tr><th>Change made</th><th>Bump type</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Added a new <code>{{VARIABLE}}</code> to any message</td><td><strong>Major</strong></td><td>v1.2 → v2.0</td></tr>
+          <tr><td>Edited message content (no new variable)</td><td>Minor</td><td>v1.2 → v1.3</td></tr>
+          <tr><td>Added a new message (no new variable)</td><td>Minor</td><td>v1.2 → v1.3</td></tr>
+          <tr><td>Removed a message</td><td>Minor</td><td>v1.2 → v1.3</td></tr>
+          <tr><td>Removed a variable from a message</td><td>Minor</td><td>v1.2 → v1.3</td></tr>
+          <tr><td>Activated (restored) an older version</td><td>Major or minor</td><td>Same rules apply to the diff</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Why it matters:</strong> A major bump signals that your app code needs to change — specifically, it must now supply a new variable to <code>getPrompt(named:variables:)</code>. A minor bump is always safe to receive: no new placeholders, no broken substitution.</p>
+
+      <h3>Example timeline</h3>
+      <pre data-lang="text"><code>v1.0  — initial prompt, variable: {{USER}}
+v1.1  — edited tone of the system message (no new variables)
+v1.2  — added a second message (no new variables)
+v2.0  — added {{PRODUCT}} to the system message  ← major bump
+v2.1  — minor wording tweak</code></pre>
     </div>
 
     <div class="legal-section">
@@ -200,8 +228,8 @@ val result = client.generateText(messages = messages)</code></pre>
       <h2>Dashboard: managing prompts</h2>
       <p>All prompt management is done from the <strong>Prompts</strong> page in the dashboard:</p>
       <ul>
-        <li><strong>Create</strong> — enter a name and at least one message. The name is permanent; use hyphens to separate words (e.g. <code>support-bot-system</code>).</li>
-        <li><strong>Edit</strong> — modify message roles or content and click <strong>Save</strong>. The version increments and the content hash updates. Client apps receive the new content on their next <code>sync()</code> call.</li>
+        <li><strong>Create</strong> — enter a name and at least one message. The name is permanent; use hyphens to separate words (e.g. <code>support-bot-system</code>). The prompt starts at <strong>v1.0</strong>.</li>
+        <li><strong>Edit</strong> — modify message roles or content and click <strong>Save</strong>. The dashboard automatically computes a major or minor version bump based on whether a new variable was introduced. The version badge updates and client apps receive the new content on their next <code>sync()</code> call.</li>
         <li><strong>Delete</strong> — removes the prompt set. Client apps remove it from their local cache on the next <code>sync()</code> call.</li>
       </ul>
       <div class="doc-note">
@@ -236,6 +264,67 @@ val result = client.generateText(messages = messages)</code></pre>
         </tbody>
       </table>
       <p>Once the retention limit is reached, the oldest snapshot is automatically removed when a new one is recorded. The active version of a prompt is never affected — only history snapshots are pruned.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>SDK version pinning</h2>
+      <p>When a prompt receives a major bump, it means a new <code>{{VARIABLE}}</code> was added. If your app hasn't been updated to supply that variable yet, <code>getPrompt(named:variables:)</code> will return it in <code>missingVariables</code> and leave the placeholder unreplaced — which is visible to end users.</p>
+      <p><strong>Version pinning</strong> solves this. Pin a prompt to a major version number and the SDK will only ever receive minor updates within that major, no matter how far ahead the server version moves. A major bump is delivered only when you explicitly bump the pin and ship an app update that handles the new variable.</p>
+
+      <h3>Configuration</h3>
+      <p>There are two ways to configure pinning — they can be combined (runtime calls take precedence over the file).</p>
+
+      <h4>JSON config file (recommended for most apps)</h4>
+      <p>Create a file named <code>maig-prompts.json</code> and add it to your app's bundle (Xcode) or <code>src/main/assets/</code> folder (Android):</p>
+      <pre data-lang="json"><code>{
+  "pinned": {
+    "support-bot": 1,
+    "onboarding-flow": 2
+  }
+}</code></pre>
+      <p>The key is the prompt name; the value is the major version to pin to. This file is version-controlled alongside your code, making it easy to review pin changes in pull requests.</p>
+
+      <h4>iOS</h4>
+      <pre data-lang="swift"><code>// Load pins from bundle file
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: "maig-prompts")
+
+// Or pin at runtime (overrides the file)
+store.pin("support-bot", majorVersion: 1)
+try await store.sync()</code></pre>
+
+      <h4>Android</h4>
+      <pre data-lang="kotlin"><code>// Load pins from assets file
+val store = PromptStore(
+    apiKey = "maig_YOUR_PROJECT_KEY",
+    context = applicationContext,
+    configFile = "maig-prompts.json",
+)
+
+// Or pin at runtime (overrides the file)
+store.pin("support-bot", majorVersion = 1)
+store.sync()</code></pre>
+
+      <h3>Pinning behaviour</h3>
+      <table class="doc-table">
+        <thead>
+          <tr><th>Scenario</th><th>Server returns</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pinned to v1, client has v1.2 cached, server has v1.3</td><td>v1.3 content</td></tr>
+          <tr><td>Pinned to v1, client has v1.2 cached, server is on v2.0 only</td><td>Nothing — client keeps v1.2</td></tr>
+          <tr><td>Pinned to v1, client has no cache, server has v1.x available</td><td>Latest v1.x (client gets a usable prompt on first launch)</td></tr>
+          <tr><td>Not pinned, hash mismatch</td><td>Latest version regardless of major</td></tr>
+          <tr><td>Not pinned, hash matches</td><td>Nothing</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Upgrading to a new major</h3>
+      <p>When you are ready to adopt v2.0 of a prompt:</p>
+      <ol>
+        <li>Update your app code to supply the new variable.</li>
+        <li>Bump the pin from <code>1</code> to <code>2</code> in the config file or runtime call.</li>
+        <li>Ship the app update — on the next <code>sync()</code>, the SDK will receive v2.x content.</li>
+      </ol>
     </div>
 
     <div class="legal-section">
@@ -290,14 +379,22 @@ if (result != null) {
       <p>The SDK calls this endpoint internally. You do not need to call it directly.</p>
       <pre data-lang="text"><code>POST https://api.maig.dev/v1/prompts/sync</code></pre>
       <p><strong>Headers:</strong> <code>Authorization: Bearer &lt;project-api-key&gt;</code>, <code>Content-Type: application/json</code></p>
-      <p><strong>Body:</strong> JSON object with an optional <code>hashes</code> field — a map of <code>{ [name]: contentHash }</code> representing what the client currently has. Omit <code>hashes</code> (or send an empty object) on first sync to receive all prompts.</p>
-      <pre data-lang="json"><code>{ "hashes": { "support-bot-system": "a3f8...", "onboarding-flow": "d4e5..." } }</code></pre>
+      <p><strong>Body:</strong> JSON object with two optional fields:</p>
+      <ul>
+        <li><code>hashes</code> — a map of <code>{ [name]: contentHash }</code> representing what the client currently has cached. Omit or send an empty object on first sync to receive all prompts.</li>
+        <li><code>pinned</code> — a map of <code>{ [name]: majorVersion }</code> for any prompts the client has pinned to a major version. Omit for prompts that should always receive the latest.</li>
+      </ul>
+      <pre data-lang="json"><code>{
+  "hashes": { "support-bot-system": "a3f8...", "onboarding-flow": "d4e5..." },
+  "pinned": { "support-bot-system": 1 }
+}</code></pre>
       <p><strong>Response:</strong></p>
       <pre data-lang="json"><code>{
   "prompts": [
     {
       "name": "support-bot-system",
-      "version": 3,
+      "majorVersion": 1,
+      "minorVersion": 3,
       "contentHash": "a3f8...",
       "messages": [
         { "role": "system", "content": "You are a helpful support agent." }
@@ -306,7 +403,7 @@ if (result != null) {
   ],
   "deletedNames": ["old-prompt"]
 }</code></pre>
-      <p>Only prompts whose <code>contentHash</code> differs from the client's cached hash are included in <code>prompts</code>. <code>deletedNames</code> lists any names the client sent in <code>hashes</code> that no longer exist on the server.</p>
+      <p>Only prompts whose <code>contentHash</code> differs from the client's cached hash are included in <code>prompts</code>. For pinned prompts, the server only returns versions within the pinned major — if no update is available within that major, the prompt is omitted entirely. <code>deletedNames</code> lists any names the client sent in <code>hashes</code> that no longer exist on the server.</p>
     </div>
 
     <div class="legal-section">

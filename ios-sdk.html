@@ -185,6 +185,48 @@ let messages = storedMessages + [Message.user("My order hasn't arrived.")]
 let result = try await client.generateText(messages: messages)</code></pre>
 
       <p>See the <a href="prompt-management.html">Prompt Management guide</a> for full details on creating prompts in the dashboard, handling the first-launch case, and the complete API reference.</p>
+
+      <h3>Semantic versioning</h3>
+      <p>Prompts are versioned as <strong>major.minor</strong> (e.g. <code>v1.2</code>). A <strong>minor bump</strong> (v1.0 → v1.1) is a safe edit — no new variables. A <strong>major bump</strong> (v1.x → v2.0) means a new <code>{{VARIABLE}}</code> was added and your app code needs to supply it.</p>
+
+      <h3>Version pinning</h3>
+      <p>Pin a prompt to a major version so your app only ever receives minor updates within that major. A major bump is never delivered until you explicitly move the pin — protecting you from broken variable substitution at runtime.</p>
+
+      <h4>Option A — JSON config file</h4>
+      <p>Add <code>maig-prompts.json</code> to your Xcode project bundle:</p>
+      <pre data-lang="json"><code>{
+  "pinned": {
+    "support-bot": 1,
+    "onboarding-flow": 2
+  }
+}</code></pre>
+      <pre data-lang="swift"><code>// Pass the filename (without .json) to the initializer
+let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY", configFile: "maig-prompts")</code></pre>
+
+      <h4>Option B — Runtime API</h4>
+      <pre data-lang="swift"><code>let store = PromptStore(apiKey: "maig_YOUR_PROJECT_KEY")
+
+// Pin before calling sync() — runtime pins override the JSON file
+store.pin("support-bot", majorVersion: 1)
+store.pin("onboarding-flow", majorVersion: 2)
+
+try await store.sync()</code></pre>
+
+      <p>When you are ready to adopt a new major version, update the pin number and handle the new variable in your app code:</p>
+      <pre data-lang="swift"><code>// Ready for v2 — bump the pin and supply the new variable
+store.pin("support-bot", majorVersion: 2)
+try await store.sync()
+
+if let result = store.getPrompt(named: "support-bot", variables: [
+    "PRODUCT": "Acme Store",
+    "TIER": userTier,  // new variable added in v2
+]) {
+    let messages = result.messages + [Message.user(userInput)]
+}</code></pre>
+
+      <div class="doc-note">
+        <strong>Pinning behaviour.</strong> If your app has a cached version within the pinned major, the server only sends newer minor updates. If your app has no cache yet (e.g. first launch), the server returns the latest available version within the pinned major so the device is never left without a prompt.
+      </div>
     </div>
 
     <div class="legal-section">
