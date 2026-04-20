@@ -103,47 +103,46 @@
 <hr>
 <h2>Step 2: Install the Swift SDK (2 minutes)</h2>
 <p>Open your Xcode project, go to <strong>File → Add Package Dependencies</strong>, and enter:</p>
-<pre><code>https://github.com/lucky13tech/maig-swift-sdk
+<pre><code>https://github.com/MAiG-dev/maig-ios-sdk
 </code></pre>
 <p>Select <strong>Up to Next Major Version</strong> starting from <code>1.0.0</code> and click <strong>Add Package</strong>.</p>
 <p>Alternatively, add it to your <code>Package.swift</code>:</p>
 <pre><code class="language-swift">dependencies: [
-    .package(url: &quot;https://github.com/lucky13tech/maig-swift-sdk&quot;, from: &quot;1.0.0&quot;),
+    .package(url: &quot;https://github.com/MAiG-dev/maig-ios-sdk&quot;, from: &quot;1.0.0&quot;),
 ],
 targets: [
     .target(
         name: &quot;YourApp&quot;,
-        dependencies: [&quot;MAIGSwift&quot;]
+        dependencies: [&quot;AIGatewaySDK&quot;]
     )
 ]
 </code></pre>
 <hr>
 <h2>Step 3: Configure the SDK (1 minute)</h2>
-<p>In your <code>App</code> entry point, configure MAIG with your project key:</p>
+<p>In your <code>App</code> entry point, create an <code>AIGatewayClient</code> with your project key and pass it to your views:</p>
 <pre><code class="language-swift">import SwiftUI
-import MAIGSwift
+import AIGatewaySDK
 
 @main
 struct MyAIApp: App {
-    init() {
-        MAIGClient.configure(apiKey: &quot;maig_live_your_project_key_here&quot;)
-    }
+    let client = AIGatewayClient(apiKey: &quot;maig_live_your_project_key_here&quot;)
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(client: client)
         }
     }
 }
 </code></pre>
-<p>That&#39;s all the setup. Your OpenAI key is on MAIG&#39;s servers. Your app only knows its project key.</p>
+<p>That&#39;s all the setup. Your provider key is on MAIG&#39;s servers. Your app only knows its project key.</p>
 <hr>
 <h2>Step 4: Make Your First AI Call (3 minutes)</h2>
 <p>Here&#39;s a minimal SwiftUI view that sends a prompt and displays the response:</p>
 <pre><code class="language-swift">import SwiftUI
-import MAIGSwift
+import AIGatewaySDK
 
 struct ContentView: View {
+    let client: AIGatewayClient
     @State private var prompt = &quot;&quot;
     @State private var response = &quot;&quot;
     @State private var isLoading = false
@@ -177,11 +176,10 @@ struct ContentView: View {
         defer { isLoading = false }
 
         do {
-            let result = try await MAIGClient.shared.complete(
+            response = try await client.generateText(
                 prompt: prompt,
-                model: &quot;gpt-4o&quot;
+                options: GenerateOptions(model: &quot;auto&quot;)
             )
-            response = result.text
         } catch {
             response = &quot;Error: \(error.localizedDescription)&quot;
         }
@@ -197,19 +195,15 @@ struct ContentView: View {
     response = &quot;&quot;
     defer { isLoading = false }
 
-    do {
-        let stream = MAIGClient.shared.stream(
-            prompt: prompt,
-            model: &quot;gpt-4o&quot;
-        )
+    let stream = client.streamText(
+        prompt: prompt,
+        options: GenerateOptions(model: &quot;auto&quot;)
+    )
 
-        for try await chunk in stream {
-            await MainActor.run {
-                response += chunk.delta
-            }
+    for await chunk in stream {
+        await MainActor.run {
+            response += chunk
         }
-    } catch {
-        response = &quot;Error: \(error.localizedDescription)&quot;
     }
 }
 </code></pre>
@@ -233,7 +227,7 @@ struct ContentView: View {
 <p><strong>Switch to Anthropic.</strong> Change <code>model: &quot;gpt-4o&quot;</code> to <code>model: &quot;claude-3-5-sonnet&quot;</code> — MAIG routes to Anthropic automatically if you&#39;ve added an Anthropic key in the dashboard.</p>
 <hr>
 <h2>Common Issues</h2>
-<p><strong>Build error: module &#39;MAIGSwift&#39; not found</strong>
+<p><strong>Build error: module &#39;AIGatewaySDK&#39; not found</strong>
 Make sure you added the package to the correct target, not just the project.</p>
 <p><strong>401 Unauthorized</strong>
 Double-check that you copied the full project key from the MAIG dashboard and that it starts with <code>maig_live_</code>.</p>
@@ -260,7 +254,7 @@ Verify your provider key is correctly added in the MAIG dashboard. Go to Provide
 
     <aside class="post-cta">
       <h2>Build AI into your mobile app — free</h2>
-      <p>MAIG gives you a secure AI gateway with native iOS and Android SDKs. Free tier: 1,000 requests/month. No credit card required.</p>
+      <p>MAIG gives you a secure AI gateway with native iOS and Android SDKs. Free tier: 2,500 requests/month. No credit card required.</p>
       <a href="https://maig.dev" class="btn">Get started free</a>
     </aside>
   </main>
