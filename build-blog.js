@@ -222,7 +222,7 @@ ${contentHtml}
 
     <aside class="post-cta">
       <h2>Build AI into your mobile app — free</h2>
-      <p>MAIG gives you a secure AI gateway with native iOS and Android SDKs. Free tier: 1,000 requests/month. No credit card required.</p>
+      <p>MAIG gives you a secure AI gateway with native iOS and Android SDKs. Free tier: 2,500 requests/month. No credit card required.</p>
       <a href="${SITE_URL}" class="btn">Get started free</a>
     </aside>
   </main>
