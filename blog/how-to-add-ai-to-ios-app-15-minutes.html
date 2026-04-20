@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!-- blog-meta: {"slug":"how-to-add-ai-to-ios-app-15-minutes","title":"How to Add AI to Your iOS App in 15 Minutes","date":"2026-04-16","tags":["iOS","Swift","SwiftUI","AI","SDK","tutorial","OpenAI","ChatGPT"],"excerpt":"Adding AI to an iOS app used to mean writing a backend, managing API keys, figuring out authentication, and wiring up a Swift networking layer to call it all. …"} -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Add AI to Your iOS App in 15 Minutes — MAIG</title>
+  <meta name="description" content="Step-by-step guide to integrating AI into your Swift iOS app in 15 minutes using the MAIG iOS SDK — no backend required." />
+  <meta name="keywords" content="ios ai sdk swift, how to add chatgpt to ios app, swift ai integration, openai ios sdk 2026, add ai to ios app, swift llm sdk" />
+  <link rel="canonical" href="https://maig.dev/blog/how-to-add-ai-to-ios-app-15-minutes.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://maig.dev/blog/how-to-add-ai-to-ios-app-15-minutes.html" />
+  <meta property="og:title" content="How to Add AI to Your iOS App in 15 Minutes" />
+  <meta property="og:description" content="Step-by-step guide to integrating AI into your Swift iOS app in 15 minutes using the MAIG iOS SDK — no backend required." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <meta property="article:published_time" content="2026-04-16T00:00:00Z" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="How to Add AI to Your iOS App in 15 Minutes" />
+  <meta name="twitter:description" content="Step-by-step guide to integrating AI into your Swift iOS app in 15 minutes using the MAIG iOS SDK — no backend required." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <link rel="stylesheet" href="../assets/blog.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPSFGRBXY3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-FPSFGRBXY3");
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How to Add AI to Your iOS App in 15 Minutes",
+    "description": "Step-by-step guide to integrating AI into your Swift iOS app in 15 minutes using the MAIG iOS SDK — no backend required.",
+    "datePublished": "2026-04-16",
+    "url": "https://maig.dev/blog/how-to-add-ai-to-ios-app-15-minutes.html",
+    "author": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC" },
+    "publisher": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC", "url": "https://maig.dev" },
+    "keywords": ["ios ai sdk swift", "how to add chatgpt to ios app", "swift ai integration", "openai ios sdk 2026", "add ai to ios app", "swift llm sdk"]
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="../index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../docs.html">Docs</a>
+      <a href="../contact.html">Contact</a>
+      <a href="https://app.maig.dev" class="btn btn-sm">Dashboard</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main class="blog-post">
+    <article>
+      <header class="post-header">
+        <div class="post-meta">
+          <time datetime="2026-04-16">April 16, 2026</time>
+          <span class="post-tags"><span class="tag">iOS</span><span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">AI</span><span class="tag">SDK</span><span class="tag">tutorial</span><span class="tag">OpenAI</span><span class="tag">ChatGPT</span></span>
+        </div>
+        <h1>How to Add AI to Your iOS App in 15 Minutes</h1>
+        <p class="post-description">Step-by-step guide to integrating AI into your Swift iOS app in 15 minutes using the MAIG iOS SDK — no backend required.</p>
+      </header>
+      <div class="post-body">
+<h1>How to Add AI to Your iOS App in 15 Minutes</h1>
+<p>Adding AI to an iOS app used to mean writing a backend, managing API keys, figuring out authentication, and wiring up a Swift networking layer to call it all. It was a weekend project at minimum.</p>
+<p>With the MAIG iOS SDK, you get it done in 15 minutes. Here&#39;s exactly how.</p>
+<hr>
+<h2>What You&#39;ll Build</h2>
+<p>By the end of this guide, you&#39;ll have a Swift iOS app that:</p>
+<ul>
+<li>Sends a prompt to an LLM (OpenAI or Anthropic)</li>
+<li>Receives and displays a streaming response in SwiftUI</li>
+<li>Keeps your provider API keys off the device</li>
+</ul>
+<p>No backend server to write. Full logs in a dashboard.</p>
+<p><strong>Prerequisites:</strong></p>
+<ul>
+<li>Xcode 15+</li>
+<li>An iOS 16+ target</li>
+<li>A free MAIG account (takes 2 minutes to create at <a href="https://maig.dev">maig.dev</a>)</li>
+</ul>
+<hr>
+<h2>Step 1: Set Up Your MAIG Project (5 minutes)</h2>
+<h3>Create a free account</h3>
+<p>Go to <a href="https://app.maig.dev">app.maig.dev</a> and sign up. No credit card required for the free tier.</p>
+<h3>Create a project</h3>
+<p>Click <strong>New Project</strong>, give it a name (e.g., &quot;My AI App&quot;), and click <strong>Create</strong>.</p>
+<h3>Add your AI provider key</h3>
+<p>In the project settings, select <strong>Provider Keys</strong> and add your OpenAI key (or Anthropic key, or both). MAIG encrypts it immediately; you won&#39;t be able to read it back.</p>
+<p>This is the last time your provider key appears anywhere near your app.</p>
+<h3>Copy your MAIG project key</h3>
+<p>Back on the project dashboard, copy the <strong>Project API Key</strong> — it starts with <code>maig_live_</code>. This is the only key that will go in your app, and it&#39;s scoped to your project with no direct LLM provider access.</p>
+<hr>
+<h2>Step 2: Install the Swift SDK (2 minutes)</h2>
+<p>Open your Xcode project, go to <strong>File → Add Package Dependencies</strong>, and enter:</p>
+<pre><code>https://github.com/lucky13tech/maig-swift-sdk
+</code></pre>
+<p>Select <strong>Up to Next Major Version</strong> starting from <code>1.0.0</code> and click <strong>Add Package</strong>.</p>
+<p>Alternatively, add it to your <code>Package.swift</code>:</p>
+<pre><code class="language-swift">dependencies: [
+    .package(url: &quot;https://github.com/lucky13tech/maig-swift-sdk&quot;, from: &quot;1.0.0&quot;),
+],
+targets: [
+    .target(
+        name: &quot;YourApp&quot;,
+        dependencies: [&quot;MAIGSwift&quot;]
+    )
+]
+</code></pre>
+<hr>
+<h2>Step 3: Configure the SDK (1 minute)</h2>
+<p>In your <code>App</code> entry point, configure MAIG with your project key:</p>
+<pre><code class="language-swift">import SwiftUI
+import MAIGSwift
+
+@main
+struct MyAIApp: App {
+    init() {
+        MAIGClient.configure(apiKey: &quot;maig_live_your_project_key_here&quot;)
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+</code></pre>
+<p>That&#39;s all the setup. Your OpenAI key is on MAIG&#39;s servers. Your app only knows its project key.</p>
+<hr>
+<h2>Step 4: Make Your First AI Call (3 minutes)</h2>
+<p>Here&#39;s a minimal SwiftUI view that sends a prompt and displays the response:</p>
+<pre><code class="language-swift">import SwiftUI
+import MAIGSwift
+
+struct ContentView: View {
+    @State private var prompt = &quot;&quot;
+    @State private var response = &quot;&quot;
+    @State private var isLoading = false
+
+    var body: some View {
+        VStack(spacing: 16) {
+            TextField(&quot;Ask anything...&quot;, text: $prompt)
+                .textFieldStyle(.roundedBorder)
+                .padding(.horizontal)
+
+            Button(&quot;Send&quot;) {
+                Task { await sendPrompt() }
+            }
+            .disabled(prompt.isEmpty || isLoading)
+
+            if isLoading {
+                ProgressView()
+            }
+
+            ScrollView {
+                Text(response)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
+        }
+        .padding()
+    }
+
+    func sendPrompt() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let result = try await MAIGClient.shared.complete(
+                prompt: prompt,
+                model: &quot;gpt-4o&quot;
+            )
+            response = result.text
+        } catch {
+            response = &quot;Error: \(error.localizedDescription)&quot;
+        }
+    }
+}
+</code></pre>
+<p>Run the app, type a prompt, and tap Send. Your response comes back through MAIG&#39;s gateway — no provider key in the binary, no backend you wrote.</p>
+<hr>
+<h2>Step 5: Add Streaming Responses (4 minutes)</h2>
+<p>Displaying the full response only after it completes feels slow. Streaming lets you show tokens as they arrive, which is dramatically better UX.</p>
+<pre><code class="language-swift">func sendStreamingPrompt() async {
+    isLoading = true
+    response = &quot;&quot;
+    defer { isLoading = false }
+
+    do {
+        let stream = MAIGClient.shared.stream(
+            prompt: prompt,
+            model: &quot;gpt-4o&quot;
+        )
+
+        for try await chunk in stream {
+            await MainActor.run {
+                response += chunk.delta
+            }
+        }
+    } catch {
+        response = &quot;Error: \(error.localizedDescription)&quot;
+    }
+}
+</code></pre>
+<p>Update your button to call <code>sendStreamingPrompt()</code> instead. Now tokens appear as they&#39;re generated — the same typewriter effect you see in ChatGPT.</p>
+<hr>
+<h2>What&#39;s in the Dashboard</h2>
+<p>While you&#39;re building, open <a href="https://app.maig.dev">app.maig.dev</a> and go to <strong>Logs</strong>. Every request you just made is there with:</p>
+<ul>
+<li>Timestamp</li>
+<li>Model used</li>
+<li>Latency (ms)</li>
+<li>Token count</li>
+<li>Status (success / error)</li>
+</ul>
+<p>This is your operational visibility from day one. No extra instrumentation needed.</p>
+<hr>
+<h2>What&#39;s Next</h2>
+<p>Now that you have a working integration, a few things worth exploring:</p>
+<p><strong>Swap models without an app update.</strong> MAIG lets you configure named routes in the dashboard. Change the model your <code>&quot;gpt-4o&quot;</code> route points to without touching your code or shipping a new binary.</p>
+<p><strong>Add a fallback provider.</strong> Configure a secondary model (e.g., Claude 3.5 Sonnet) that automatically handles requests if your primary provider is down or rate-limited.</p>
+<p><strong>Switch to Anthropic.</strong> Change <code>model: &quot;gpt-4o&quot;</code> to <code>model: &quot;claude-3-5-sonnet&quot;</code> — MAIG routes to Anthropic automatically if you&#39;ve added an Anthropic key in the dashboard.</p>
+<hr>
+<h2>Common Issues</h2>
+<p><strong>Build error: module &#39;MAIGSwift&#39; not found</strong>
+Make sure you added the package to the correct target, not just the project.</p>
+<p><strong>401 Unauthorized</strong>
+Double-check that you copied the full project key from the MAIG dashboard and that it starts with <code>maig_live_</code>.</p>
+<p><strong>Response is nil</strong>
+Verify your provider key is correctly added in the MAIG dashboard. Go to Provider Keys and confirm the key is saved (you&#39;ll see a masked version).</p>
+<hr>
+<h2>Summary</h2>
+<p>In 15 minutes you:</p>
+<ol>
+<li>Created a MAIG project and added your OpenAI key (server-side, encrypted)</li>
+<li>Installed the Swift SDK via SPM</li>
+<li>Made a non-streaming API call</li>
+<li>Upgraded to streaming responses with <code>AsyncSequence</code></li>
+<li>Got full request logs in the dashboard — for free</li>
+</ol>
+<p>Your provider API key never touched the app binary.</p>
+<hr>
+<h2>Start Building</h2>
+<p>The free tier includes 1,000 requests/month — plenty to build and test your AI features. No credit card required.</p>
+<p><a href="https://maig.dev">Get started for free at maig.dev</a></p>
+
+      </div>
+    </article>
+
+    <aside class="post-cta">
+      <h2>Build AI into your mobile app — free</h2>
+      <p>MAIG gives you a secure AI gateway with native iOS and Android SDKs. Free tier: 1,000 requests/month. No credit card required.</p>
+      <a href="https://maig.dev" class="btn">Get started free</a>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="../docs.html">Docs</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+  <script src="../assets/nav.js"></script>
+</body>
+</html>

@@ -50,4 +50,15 @@
     <priority>0.3</priority>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://maig.dev/blog/</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://maig.dev/blog/how-to-add-ai-to-ios-app-15-minutes.html</loc>
+    <lastmod>2026-04-16</lastmod>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>

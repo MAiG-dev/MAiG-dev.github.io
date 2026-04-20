@@ -28,6 +28,7 @@ const SITEMAP    = path.join(SITE_ROOT, 'sitemap.xml');
 const SITE_URL   = 'https://maig.dev';
 const OG_IMAGE   = `${SITE_URL}/assets/og-image.png`;
 const PUBLISHER  = 'Lucky 13 Technologies, LLC';
+const GA_ID      = 'G-FPSFGRBXY3';
 
 const args = process.argv.slice(2);
 
@@ -167,6 +168,14 @@ function postHtml({ fm, contentHtml, postExcerpt }) {
   <meta name="twitter:image" content="${OG_IMAGE}" />
   <link rel="stylesheet" href="../assets/style.css" />
   <link rel="stylesheet" href="../assets/blog.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "${GA_ID}");
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
