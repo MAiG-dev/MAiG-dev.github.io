@@ -95,11 +95,17 @@
 <p>Go to <a href="https://app.maig.dev">app.maig.dev</a> and sign up. No credit card required for the free tier.</p>
 <h3>Create a project</h3>
 <p>Click <strong>New Project</strong>, give it a name (e.g., &quot;My AI App&quot;), and click <strong>Create</strong>.</p>
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/create-new-project.png" alt="Create new project button in the MAIG dashboard" />
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/name-project.png" alt="Naming a new project in the MAIG dashboard" />
 <h3>Add your AI provider key</h3>
 <p>In the project settings, select <strong>Provider Keys</strong> and add your OpenAI key (or Anthropic key, or both). MAIG encrypts it immediately; you won&#39;t be able to read it back.</p>
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/generate-key-from-provider.png" alt="Generating an API key from your AI provider" />
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/add-provider-key.png" alt="Adding a provider API key in the MAIG dashboard" />
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/new-key-added.png" alt="Provider key successfully added in the MAIG dashboard" />
 <p>This is the last time your provider key appears anywhere near your app.</p>
 <h3>Copy your MAIG project key</h3>
 <p>Back on the project dashboard, copy the <strong>Project API Key</strong> — it starts with <code>maig_live_</code>. This is the only key that will go in your app, and it&#39;s scoped to your project with no direct LLM provider access.</p>
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/copy-project-key.png" alt="Copying the MAIG project API key from the dashboard" />
 <hr>
 <h2>Step 2: Install the Swift SDK (2 minutes)</h2>
 <p>Open your Xcode project, go to <strong>File → Add Package Dependencies</strong>, and enter:</p>
@@ -187,6 +193,7 @@ struct ContentView: View {
 }
 </code></pre>
 <p>Run the app, type a prompt, and tap Send. Your response comes back through MAIG&#39;s gateway — no provider key in the binary, no backend you wrote.</p>
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/result.png" alt="AI response displayed in the SwiftUI app" />
 <hr>
 <h2>Step 5: Add Streaming Responses (4 minutes)</h2>
 <p>Displaying the full response only after it completes feels slow. Streaming lets you show tokens as they arrive, which is dramatically better UX.</p>
@@ -219,6 +226,7 @@ struct ContentView: View {
 <li>Status (success / error)</li>
 </ul>
 <p>This is your operational visibility from day one. No extra instrumentation needed.</p>
+<img src="../assets/blog/how-to-add-ai-to-ios-app-15-minutes/view-logs.png" alt="Request logs in the MAIG dashboard" />
 <hr>
 <h2>What&#39;s Next</h2>
 <p>Now that you have a working integration, a few things worth exploring:</p>
@@ -244,10 +252,6 @@ Verify your provider key is correctly added in the MAIG dashboard. Go to Provide
 <li>Got full request logs in the dashboard — for free</li>
 </ol>
 <p>Your provider API key never touched the app binary.</p>
-<hr>
-<h2>Start Building</h2>
-<p>The free tier includes 2,500 requests/month — plenty to build and test your AI features. No credit card required.</p>
-<p><a href="https://maig.dev">Get started for free at maig.dev</a></p>
 
       </div>
     </article>
