@@ -13,18 +13,18 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MAIG — Mobile AI Gateway</title>
-  <meta name="description" content="A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK." />
+  <meta name="description" content="The AI backend for iOS and Android. Update prompts and switch providers from a dashboard — no app release required." />
   <link rel="canonical" href="https://maig.dev/" />
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://maig.dev/" />
   <meta property="og:title" content="MAIG — Mobile AI Gateway" />
-  <meta property="og:description" content="A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK." />
+  <meta property="og:description" content="The AI backend for iOS and Android. Update prompts and switch providers from a dashboard — no app release required." />
   <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="MAIG — Mobile AI Gateway" />
-  <meta name="twitter:description" content="A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK." />
+  <meta name="twitter:description" content="The AI backend for iOS and Android. Update prompts and switch providers from a dashboard — no app release required." />
   <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
   <link rel="stylesheet" href="assets/style.css" />
   <script type="application/ld+json">
@@ -32,7 +32,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "MAIG — Mobile AI Gateway",
-    "description": "A unified AI gateway for mobile apps. Route requests across OpenAI, Anthropic, and more with a single SDK.",
+    "description": "The AI backend for iOS and Android. Update prompts and switch providers from a dashboard — no app release required.",
     "url": "https://maig.dev",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "iOS, Android",
@@ -349,9 +349,14 @@
       <h2>Building AI into a mobile app is harder than it looks.</h2>
       <div class="problem-grid">
         <div class="problem-item">
-          <div class="problem-icon">🔑</div>
-          <h3>Your API key can't live in the binary</h3>
-          <p>Keys embedded in iOS or Android apps can be extracted. You need a server to hold them — which means building a server before you can build the feature.</p>
+          <div class="problem-icon">⚡</div>
+          <h3>Provider failures surface directly to your users</h3>
+          <p>Rate limits, timeouts, and outages happen. Without built-in retry logic, request throttling, and automatic fallback, those failures hit your users raw — and building that safety net yourself takes weeks.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">✏️</div>
+          <h3>Changing a prompt means shipping a release</h3>
+          <p>Prompts baked into the binary can't be updated without going through App Store review. Every tweak, every fix, every tone adjustment waits on a release cycle.</p>
         </div>
         <div class="problem-item">
           <div class="problem-icon">🔄</div>
@@ -362,11 +367,6 @@
           <div class="problem-icon">📉</div>
           <h3>You're flying blind in production</h3>
           <p>Without logging, you don't know which requests are failing, how much each feature costs, or why your AI responses are slow.</p>
-        </div>
-        <div class="problem-item">
-          <div class="problem-icon">✏️</div>
-          <h3>Changing a prompt means shipping a release</h3>
-          <p>Prompts baked into the binary can't be updated without going through App Store review. Every tweak, every fix, every tone adjustment waits on a release cycle.</p>
         </div>
       </div>
     </section>
@@ -490,7 +490,7 @@ client.streamText("Tell me a story").collect { token -&gt;
         <div class="feature">
           <div class="feature-icon">🔑</div>
           <h3>Keys off the device</h3>
-          <p>Your provider API keys are encrypted and held server-side by MAIG — not in your app binary where users could extract them. Your mobile app holds only a scoped MAIG project key. Same trust model as Stripe: credentials live with the infrastructure, not with your users.</p>
+          <p>Your provider API keys are encrypted and held server-side. Your mobile app holds only a scoped MAIG project key. Same trust model as Stripe: credentials live with the infrastructure, not the client.</p>
         </div>
         <div class="feature">
           <div class="feature-icon">📊</div>
