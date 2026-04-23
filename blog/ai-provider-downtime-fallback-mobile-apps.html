@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!-- blog-meta: {"slug":"ai-provider-downtime-fallback-mobile-apps","title":"AI Providers Go Down. Here's What Happens to Your App, and What to Do About It","date":"2026-04-23","tags":["MAIG","reliability","fallback","AI outages","OpenAI downtime","Anthropic downtime","mobile AI","iOS","Android"],"excerpt":"OpenAI had 103 incidents in six months. Anthropic had 183. Google had multiregion Vertex AI failures. These are tracked incidents from official status pages, S…"} -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Providers Go Down. Here's What Happens to Your App, and What to Do About It — MAIG</title>
+  <meta name="description" content="OpenAI had 103 incidents in 6 months. Anthropic had 183. Google had major Vertex AI outages. When your AI provider goes down, your app goes dark. Here's how MAIG handles it automatically." />
+  <meta name="keywords" content="ai provider fallback, openai downtime, anthropic outage, ai api reliability, llm fallback routing, mobile ai gateway fallback, ai provider redundancy" />
+  <link rel="canonical" href="https://maig.dev/blog/ai-provider-downtime-fallback-mobile-apps.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://maig.dev/blog/ai-provider-downtime-fallback-mobile-apps.html" />
+  <meta property="og:title" content="AI Providers Go Down. Here's What Happens to Your App, and What to Do About It" />
+  <meta property="og:description" content="OpenAI had 103 incidents in 6 months. Anthropic had 183. Google had major Vertex AI outages. When your AI provider goes down, your app goes dark. Here's how MAIG handles it automatically." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <meta property="article:published_time" content="2026-04-23T00:00:00Z" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI Providers Go Down. Here's What Happens to Your App, and What to Do About It" />
+  <meta name="twitter:description" content="OpenAI had 103 incidents in 6 months. Anthropic had 183. Google had major Vertex AI outages. When your AI provider goes down, your app goes dark. Here's how MAIG handles it automatically." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <link rel="stylesheet" href="../assets/blog.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPSFGRBXY3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-FPSFGRBXY3");
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "AI Providers Go Down. Here's What Happens to Your App, and What to Do About It",
+    "description": "OpenAI had 103 incidents in 6 months. Anthropic had 183. Google had major Vertex AI outages. When your AI provider goes down, your app goes dark. Here's how MAIG handles it automatically.",
+    "datePublished": "2026-04-23",
+    "url": "https://maig.dev/blog/ai-provider-downtime-fallback-mobile-apps.html",
+    "author": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC" },
+    "publisher": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC", "url": "https://maig.dev" },
+    "keywords": ["ai provider fallback", "openai downtime", "anthropic outage", "ai api reliability", "llm fallback routing", "mobile ai gateway fallback", "ai provider redundancy"]
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="../index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../docs.html">Docs</a>
+      <a href="../contact.html">Contact</a>
+      <a href="https://app.maig.dev" class="btn btn-sm">Dashboard</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main class="blog-post">
+    <article>
+      <header class="post-header">
+        <div class="post-meta">
+          <time datetime="2026-04-23">April 23, 2026</time>
+          <span class="post-tags"><span class="tag">MAIG</span><span class="tag">reliability</span><span class="tag">fallback</span><span class="tag">AI outages</span><span class="tag">OpenAI downtime</span><span class="tag">Anthropic downtime</span><span class="tag">mobile AI</span><span class="tag">iOS</span><span class="tag">Android</span></span>
+        </div>
+        <h1>AI Providers Go Down. Here's What Happens to Your App, and What to Do About It</h1>
+        <p class="post-description">OpenAI had 103 incidents in 6 months. Anthropic had 183. Google had major Vertex AI outages. When your AI provider goes down, your app goes dark. Here's how MAIG handles it automatically.</p>
+      </header>
+      <div class="post-body">
+<h2>When AI Goes Dark, Your App Goes With It</h2>
+<p>OpenAI had <strong>103 incidents</strong> in six months. Anthropic had <strong>183</strong>. Google had multi-region Vertex AI failures.</p>
+<p>These are tracked incidents from official status pages, StatusGator, and news coverage over the past six months (October 2025 to April 2026).</p>
+<p>The impact is the same for every AI-powered mobile app. The provider goes down, your app goes dark.</p>
+<h2>The Real Outage Record</h2>
+<h3><a href="https://status.openai.com">OpenAI</a> (October 2025 to April 2026)</h3>
+<ul>
+<li><strong>103 tracked incidents</strong> in this 6-month window</li>
+<li><strong>February 3–4, 2026:</strong> 28,000+ user reports on February 3 alone. ChatGPT, custom GPTs, and chat history all affected. Recovery took until 9:32 AM PST on February 4.</li>
+<li><strong>April 20, 2026:</strong> Users unable to load ChatGPT and Codex, resolved same day.</li>
+<li><strong>April 16, 2026:</strong> Responses API streaming errors.</li>
+<li><strong>January 8, 2026:</strong> Image input to API and ChatGPT failed.</li>
+</ul>
+<p>Pattern: scattered incidents, generally shorter durations, but frequent enough to matter.</p>
+<p><img src="../assets/blog/ai-provider-downtime-fallback-mobile-apps/OpenAI-downtime.png" alt="OpenAI status page showing a recent incident"></p>
+<h3><a href="https://status.anthropic.com">Anthropic (Claude)</a> (October 2025 to April 2026)</h3>
+<ul>
+<li><strong>183 tracked incidents</strong> in this window, more than OpenAI</li>
+<li><strong>95 incidents since January 2026 alone</strong></li>
+<li><strong>Typical mean time to recovery: ~214 minutes</strong> (~3.5 hours)</li>
+<li><strong>March 25, 2026:</strong> Sign-in failures, timeouts, elevated errors across API, Claude.ai, Claude Code, Claude Cowork. First acknowledged 9:39 AM UTC. Fully resolved 1:14 PM UTC. Total duration: <strong>~4.5 hours</strong>.</li>
+<li><strong>April 15, 2026:</strong> Elevated errors across Claude chatbot, API, and Claude Code. Peaked at ~6,000 user reports. Service went down, partially recovered, went down again. Total window: <strong>~3 hours</strong>. Covered by <a href="https://www.cnbc.com/2026/04/15/anthropic-outage-elevated-errors-claude-chatbot-code-api.html">CNBC</a> and <a href="https://www.techradar.com/news/live/claude-anthropic-down-outage-april-15-2026">TechRadar</a>.</li>
+<li><strong>March 2, 2026:</strong> Major outage impacting all platforms. 1,700–4,700 outage reports.</li>
+<li><strong>March 18, 2026:</strong> Claude.ai and Claude Code outage. ~40 minutes.</li>
+<li><strong>January 14, 2026:</strong> Elevated error rates across Opus 4.5 and Sonnet 4.5.</li>
+</ul>
+<p>Pattern: escalating through Q1 2026, cluster of incidents in March–April. Longer recovery windows than OpenAI.</p>
+<p><img src="../assets/blog/ai-provider-downtime-fallback-mobile-apps/Claude-downtime.png" alt="Anthropic Claude status page showing a recent incident"></p>
+<h3><a href="https://status.cloud.google.com">Google (Gemini / Vertex AI)</a> (October 2025 to April 2026)</h3>
+<ul>
+<li><strong>February 27, 2026:</strong> Vertex AI Gemini API increased error rates on global endpoint. Started 04:37 PST, ended 06:35 PST. <strong>~2 hours</strong>. Affected: global endpoint + seven US regions. Also took down Agent Assist, Dialogflow CX, and Google Cloud Support.</li>
+<li><strong>January 7, 2026:</strong> Google AI Studio and Gemini API warning. ~1 hour 45 minutes.</li>
+<li><strong>December 3, 2025:</strong> Vertex Gemini API warning. ~1 hour 20 minutes.</li>
+</ul>
+<p>Pattern: Less frequent but wide blast radius when they do occur (multi-region).</p>
+<h3>Industry Context</h3>
+<ul>
+<li>Global AI outage incidents increased from 1,382 (January 2025) to 2,110 (March 2026), a <strong>53% increase</strong> in 14 months.</li>
+<li>AI provider incidents are accelerating. The frequency and duration of outages across all major providers continues to increase.</li>
+</ul>
+<h2>What This Means for Your App</h2>
+<p>A user opens your app. They tap the AI feature. They wait.</p>
+<p>They get an error, or worse, a spinner that never resolves.</p>
+<p>They leave a 1-star review. They churn. They tweet.</p>
+<p>The provider&#39;s status page updating to &quot;investigating&quot; doesn&#39;t help your users right now. And honestly, your users don&#39;t care which provider is down. They care that their AI feature doesn&#39;t work.</p>
+<p><img src="../assets/blog/ai-provider-downtime-fallback-mobile-apps/ai-loading.png" alt="Mobile app screen showing an AI feature stuck on a loading spinner"></p>
+<h2>Your Options</h2>
+<p>Developers have historically had a few choices:</p>
+<h3>1. Do Nothing (Most Common)</h3>
+<p>Hope the outage is short. Hope your users are patient. Hope they come back.</p>
+<p>Most indie developers and small teams go this route. It&#39;s also why so many AI features have reliability complaints in their negative reviews.</p>
+<h3>2. Build Your Own Fallback Logic</h3>
+<p>Catch errors. Retry the request. Switch to a different provider if needed. Handle partial streaming responses. Normalize error formats across providers. Manage timeouts. Decide which provider to route to under what conditions. Do this consistently across iOS and Android.</p>
+<p>This is genuinely hard. It&#39;s not just catch the error and try another provider. You&#39;re building infrastructure that needs to work every single time. And when it breaks, your users are still stuck.</p>
+<h3>3. Use a Gateway That Handles It</h3>
+<p>Set a primary provider and a fallback. The gateway detects degradation, reroutes requests, and keeps your app code untouched.</p>
+<h2>How MAIG Fallback Works</h2>
+<p>MAIG handles the complexity server-side. Set it up once in the dashboard:</p>
+<p>When you configure fallback routing in MAIG:</p>
+<ol>
+<li><strong>You set a primary provider and a fallback</strong> in the MAIG dashboard</li>
+<li><strong>MAIG detects degradation</strong> when the primary returns errors or times out</li>
+<li><strong>Requests are automatically rerouted</strong> to the fallback provider, transparently</li>
+<li><strong>Your SDK returns the same response shape</strong>, no app-side changes required</li>
+<li><strong>When the primary recovers</strong>, traffic shifts back automatically</li>
+</ol>
+<p>The developer doesn&#39;t write retry logic. They don&#39;t normalize error codes. They don&#39;t manage timeout thresholds. They don&#39;t switch providers manually.</p>
+<h3>The Code That Doesn&#39;t Change</h3>
+<p>Here&#39;s what your iOS app looks like with MAIG:</p>
+<pre><code class="language-swift">import AIGatewaySDK
+
+let client = AIGatewayClient(apiKey: &quot;maig_live_...&quot;)
+
+let response = try await client.generateText(
+    prompt: userMessage,
+    options: GenerateOptions(model: &quot;smart&quot;)
+)
+// If your configured primary provider is degraded, MAIG routes to your fallback
+// Same response shape. Your code doesn&#39;t change.
+</code></pre>
+<p>And on Android:</p>
+<pre><code class="language-kotlin">import com.maig.sdk.AIGatewayClient
+import com.maig.sdk.GenerateOptions
+
+// Fallback is dashboard-configured, client code is unchanged
+val client = AIGatewayClient(apiKey = &quot;maig_live_...&quot;)
+
+// generateText is a suspend function — call from a coroutine scope
+val response = client.generateText(
+    prompt = userMessage,
+    options = GenerateOptions(model = &quot;smart&quot;)
+)
+// Fallback routing is transparent to the SDK caller
+</code></pre>
+<p>That&#39;s it. The same code. The same response shape. No conditional logic. No error handling for provider outages.</p>
+<h3>What You Don&#39;t Have to Build</h3>
+<p>Here&#39;s what you&#39;d build yourself without a gateway:</p>
+<pre><code>// Pseudocode: What you&#39;d need to build
+1. Catch API errors (4xx, 5xx, timeouts)
+2. Implement retry logic with exponential backoff
+3. Track error rates per provider
+4. Decide when to switch providers (thresholds, timing)
+5. Normalize error formats across providers
+6. Handle partial streaming responses
+7. Log and alert on fallback events
+8. Monitor when primary recovers
+9. Switch back automatically
+10. Test all of this across iOS and Android
+</code></pre>
+<p>That&#39;s dozens of decision points, multiple failure modes, and a maintenance burden that grows with every provider you add.</p>
+<h2>The Boring Infrastructure Sell</h2>
+<p>Good infrastructure is infrastructure you don&#39;t have to think about.</p>
+<p>Fallback routing isn&#39;t exciting. It&#39;s just what has to exist so your users never feel the difference when Anthropic goes down for 4.5 hours on a Tuesday.</p>
+<p>Or when OpenAI has another 28,000-report incident.</p>
+<p>Or when Google&#39;s multi-region failure takes down half their AI services.</p>
+<p>You&#39;re building an AI-powered mobile app. Your users expect it to work. They don&#39;t expect you to explain which provider had an outage today.</p>
+<h2>The Bottom Line</h2>
+<p>AI providers are going to have outages. That&#39;s the pattern from 14 months of data across every major provider.</p>
+<p>Your users don&#39;t know which provider powers your app. They just know if it works.</p>
+<p>With MAIG&#39;s fallback routing, it does.</p>
+<p><strong>Ready to stop worrying about provider reliability?</strong> MAIG has a free tier with 2,500 requests/month and includes automatic fallback routing. No credit card required. Sign up at <a href="https://maig.dev">maig.dev</a>.</p>
+<hr>
+<p><strong>Next up:</strong> See it configured step by step: <a href="add-fallback-model-ios-android-app-5-minutes.html">How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes</a>.</p>
+
+      </div>
+    </article>
+
+    <aside class="post-cta">
+      <h2>Build AI into your mobile app — free</h2>
+      <p>MAIG gives you a secure AI gateway with native iOS and Android SDKs. Free tier: 2,500 requests/month. No credit card required.</p>
+      <a href="https://maig.dev" class="btn">Get started free</a>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="../docs.html">Docs</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+  <script src="../assets/nav.js"></script>
+</body>
+</html>

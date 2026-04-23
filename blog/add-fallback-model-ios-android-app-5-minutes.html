@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<!-- blog-meta: {"slug":"add-fallback-model-ios-android-app-5-minutes","title":"How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes","date":"2026-04-22","tags":["iOS","Android","Swift","Kotlin","AI","fallback","reliability","OpenAI","Anthropic","LLM routing"],"excerpt":"OpenAI had a multihour outage in November 2024. Anthropic's API saw elevated error rates for several hours in early 2025. Apps with no fallback strategy lost A…"} -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes — MAIG</title>
+  <meta name="description" content="Configure automatic AI model fallback in your iOS or Android app using MAIG. No code changes. No app update needed when your primary provider goes down." />
+  <meta name="keywords" content="llm fallback model mobile, openai fallback anthropic, ai model fallback ios android, llm routing mobile app, openai outage fallback, mobile ai reliability" />
+  <link rel="canonical" href="https://maig.dev/blog/add-fallback-model-ios-android-app-5-minutes.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://maig.dev/blog/add-fallback-model-ios-android-app-5-minutes.html" />
+  <meta property="og:title" content="How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes" />
+  <meta property="og:description" content="Configure automatic AI model fallback in your iOS or Android app using MAIG. No code changes. No app update needed when your primary provider goes down." />
+  <meta property="og:image" content="https://maig.dev/assets/og-image.png" />
+  <meta property="article:published_time" content="2026-04-22T00:00:00Z" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes" />
+  <meta name="twitter:description" content="Configure automatic AI model fallback in your iOS or Android app using MAIG. No code changes. No app update needed when your primary provider goes down." />
+  <meta name="twitter:image" content="https://maig.dev/assets/og-image.png" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <link rel="stylesheet" href="../assets/blog.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPSFGRBXY3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-FPSFGRBXY3");
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes",
+    "description": "Configure automatic AI model fallback in your iOS or Android app using MAIG. No code changes. No app update needed when your primary provider goes down.",
+    "datePublished": "2026-04-22",
+    "url": "https://maig.dev/blog/add-fallback-model-ios-android-app-5-minutes.html",
+    "author": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC" },
+    "publisher": { "@type": "Organization", "name": "Lucky 13 Technologies, LLC", "url": "https://maig.dev" },
+    "keywords": ["llm fallback model mobile", "openai fallback anthropic", "ai model fallback ios android", "llm routing mobile app", "openai outage fallback", "mobile ai reliability"]
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="../index.html" style="color:inherit;text-decoration:none;">m<span style="color:var(--accent-light)">a</span>ig</a></div>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../docs.html">Docs</a>
+      <a href="../contact.html">Contact</a>
+      <a href="https://app.maig.dev" class="btn btn-sm">Dashboard</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main class="blog-post">
+    <article>
+      <header class="post-header">
+        <div class="post-meta">
+          <time datetime="2026-04-22">April 22, 2026</time>
+          <span class="post-tags"><span class="tag">iOS</span><span class="tag">Android</span><span class="tag">Swift</span><span class="tag">Kotlin</span><span class="tag">AI</span><span class="tag">fallback</span><span class="tag">reliability</span><span class="tag">OpenAI</span><span class="tag">Anthropic</span><span class="tag">LLM routing</span></span>
+        </div>
+        <h1>How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes</h1>
+        <p class="post-description">Configure automatic AI model fallback in your iOS or Android app using MAIG. No code changes. No app update needed when your primary provider goes down.</p>
+      </header>
+      <div class="post-body">
+<h1>How to Add a Fallback AI Model to Your iOS or Android App in 5 Minutes</h1>
+<p>OpenAI had a multi-hour outage in November 2024. Anthropic&#39;s API saw elevated error rates for several hours in early 2025. Apps with no fallback strategy lost AI features during both events.</p>
+<p>Adding a fallback model sounds like heavy lifting. The immediate instinct is to build it yourself: detect errors, retry with a different provider, handle different response formats, update your app code, and ship a new binary. MAIG makes it a 5-minute dashboard setup. No code change. No app update.</p>
+<p>Here&#39;s how it works.</p>
+<h2>Why Fallback Matters for Mobile Apps</h2>
+<p>Backend services recover from provider outages by redeploying. Mobile apps can&#39;t do that.</p>
+<p>Your iOS or Android app calls an AI provider directly. When that provider goes down, your users see errors. Two things can fix it:</p>
+<ol>
+<li>The provider recovers, or</li>
+<li>You release an update with a different provider and users install it</li>
+</ol>
+<p>Step 2 alone can take days. Many users never update. They just stop using the feature.</p>
+<p>A gateway with fallback routing handles provider failures transparently. Users never see an error message. The gateway detects the failure, retries against the fallback provider, and returns a successful response. The app has no idea a failover occurred.</p>
+<h2>The Architecture</h2>
+<p>MAIG uses <strong>named routes</strong> to separate your app code from specific models and providers. Instead of calling <code>&quot;gpt-4o&quot;</code> directly, your app calls a named route like <code>&quot;production-chat&quot;</code>. MAIG resolves the route to the appropriate model. It falls back automatically if that model is unavailable.</p>
+<pre><code>[App calls route: &quot;production-chat&quot;]
+              ↓
+[MAIG resolves: primary = gpt-4o]
+              ↓ (if gpt-4o fails)
+[MAIG falls back: secondary = claude-3-5-sonnet]
+              ↓
+[App receives successful response — no error]
+</code></pre>
+<p>The fallback logic runs server-side. The primary provider returns a rate limit error (429), server error (500+), or times out. MAIG retries the request against the fallback provider automatically.</p>
+<h2>Step 1: Add Both Provider Keys to MAIG</h2>
+<p>Go to <strong>Provider Keys</strong> in your <a href="https://app.maig.dev">MAIG dashboard</a>. Add keys for both providers:</p>
+<ul>
+<li><strong>OpenAI:</strong> <code>sk-proj-...</code></li>
+<li><strong>Anthropic:</strong> <code>sk-ant-...</code></li>
+</ul>
+<p>Both are encrypted server-side and never leave MAIG&#39;s servers. Your app holds a scoped MAIG project key.</p>
+<h2>Step 2: Create a Named Route With Fallback</h2>
+<p>Go to <strong>Routes → New Route</strong> in your project dashboard.</p>
+<p>Configure these settings:</p>
+<ul>
+<li><strong>Route name:</strong> <code>production-chat</code> (or any name you&#39;ll use in your app)</li>
+<li><strong>Primary model:</strong> <code>gpt-4o</code></li>
+<li><strong>Fallback model:</strong> <code>claude-3-5-sonnet</code></li>
+<li><strong>Retry on:</strong> Server errors (5xx), Rate limits (429), Timeout</li>
+</ul>
+<p>Save the route.</p>
+<p><img src="../assets/blog/add-fallback-model-ios-android-app-5-minutes/define-fallback.png" alt="Route configuration screen showing a named route with primary and fallback models defined"></p>
+<p>That&#39;s all the configuration needed.</p>
+<h2>Step 3: Use the Route in Your App</h2>
+<p>Update your app to call the named route instead of a specific model. The change is a one-line update.</p>
+<h3>iOS (Swift)</h3>
+<p><strong>Before:</strong></p>
+<pre><code class="language-swift">import AIGatewaySDK
+
+let client = AIGatewayClient(apiKey: &quot;maig_live_...&quot;)
+let response = try await client.generateText(
+    prompt: userMessage,
+    options: GenerateOptions(model: &quot;gpt-4o&quot;)
+)
+</code></pre>
+<p><strong>After:</strong></p>
+<pre><code class="language-swift">import AIGatewaySDK
+
+let client = AIGatewayClient(apiKey: &quot;maig_live_...&quot;)
+let response = try await client.generateText(
+    prompt: userMessage,
+    options: GenerateOptions(model: &quot;production-chat&quot;)  // named route — MAIG resolves to primary with automatic fallback
+)
+</code></pre>
+<p>For streaming:</p>
+<pre><code class="language-swift">import AIGatewaySDK
+
+let client = AIGatewayClient(apiKey: &quot;maig_live_...&quot;)
+let stream = client.streamText(
+    prompt: userMessage,
+    options: GenerateOptions(model: &quot;production-chat&quot;)
+)
+
+for await chunk in stream {
+    responseText += chunk
+}
+</code></pre>
+<h3>Android (Kotlin)</h3>
+<p><strong>Before:</strong></p>
+<pre><code class="language-kotlin">import com.maig.sdk.AIGatewayClient
+import com.maig.sdk.GenerateOptions
+
+val client = AIGatewayClient(apiKey = &quot;maig_live_...&quot;)
+// suspend function — call from a coroutine scope
+val response = client.generateText(
+    prompt = userMessage,
+    options = GenerateOptions(model = &quot;gpt-4o&quot;)
+)
+</code></pre>
+<p><strong>After:</strong></p>
+<pre><code class="language-kotlin">import com.maig.sdk.AIGatewayClient
+import com.maig.sdk.GenerateOptions
+
+val client = AIGatewayClient(apiKey = &quot;maig_live_...&quot;)
+// suspend function — call from a coroutine scope
+val response = client.generateText(
+    prompt = userMessage,
+    options = GenerateOptions(model = &quot;production-chat&quot;)  // named route — MAIG resolves to primary with automatic fallback
+)
+</code></pre>
+<p>For streaming:</p>
+<pre><code class="language-kotlin">import com.maig.sdk.AIGatewayClient
+import com.maig.sdk.GenerateOptions
+
+val client = AIGatewayClient(apiKey = &quot;maig_live_...&quot;)
+client.streamText(
+    prompt = userMessage,
+    options = GenerateOptions(model = &quot;production-chat&quot;)
+).collect { chunk -&gt;
+    responseText += chunk
+}
+</code></pre>
+<p>That&#39;s the entire code change. Ship this update once. Your fallback is in place permanently.</p>
+<h2>Changing Models Without an App Update</h2>
+<p>Named routes give you more than just fallback. You can change which model your app uses without shipping a new binary.</p>
+<p>Say GPT-4o mini releases a significantly improved version, or Anthropic drops prices on Claude 3.5 Haiku. You want to switch all users to the better or cheaper model immediately. You don&#39;t need to wait for App Store review or users to update.</p>
+<p>Go to your route in the MAIG dashboard, change the <strong>Primary model</strong> from <code>gpt-4o</code> to <code>gpt-4o-mini</code>, and save. Every call to <code>&quot;production-chat&quot;</code> from that moment forward uses the new model. Users on old app versions automatically benefit. They&#39;re calling the same route name, which now resolves to the new model.</p>
+<p>That&#39;s the point of routing at the gateway layer. App code stays the same. Model decisions move to the dashboard.</p>
+<h2>Multiple Routes for Different Use Cases</h2>
+<p>You can define multiple named routes for different features in your app:</p>
+<table>
+<thead>
+<tr>
+<th>Route Name</th>
+<th>Primary</th>
+<th>Fallback</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>chat</code></td>
+<td>gpt-4o</td>
+<td>claude-3-5-sonnet</td>
+<td>Conversational chat (quality-focused)</td>
+</tr>
+<tr>
+<td><code>quick-reply</code></td>
+<td>gpt-4o-mini</td>
+<td>claude-3-5-haiku</td>
+<td>Short suggestions (latency-focused)</td>
+</tr>
+<tr>
+<td><code>summarize</code></td>
+<td>claude-3-5-sonnet</td>
+<td>gpt-4o</td>
+<td>Document summarization (Claude excels here)</td>
+</tr>
+<tr>
+<td><code>classify</code></td>
+<td>gpt-4o-mini</td>
+<td>gpt-4o</td>
+<td>Content classification (cheap + fast)</td>
+</tr>
+</tbody></table>
+<p>Your app code uses route names, never model names. When you want to adjust the model for any feature, it&#39;s a dashboard change. No code, no release.</p>
+<h2>Testing Your Fallback</h2>
+<p>Don&#39;t wait for a real outage to find out. MAIG has a way to test it first.</p>
+<p>In the MAIG dashboard, go to your route and toggle <strong>Force Fallback</strong> to on. Now every request through that route will skip the primary model and go directly to the fallback. Make a test request from your app. You should get a successful response.</p>
+<p>Check the <strong>Logs</strong> view. You&#39;ll see the request tagged with the fallback model, confirming the route resolved to the fallback provider.</p>
+<p>Turn <strong>Force Fallback</strong> back off when done.</p>
+<h2>What Fallback Doesn&#39;t Cover</h2>
+<p>Fallback routing handles provider errors and rate limits. It doesn&#39;t handle these cases:</p>
+<ul>
+<li><strong>Your MAIG account being suspended.</strong> Pay your bill.</li>
+<li><strong>Invalid prompts.</strong> A 400 error from the primary will get the same 400 from the fallback.</li>
+<li><strong>Content policy violations.</strong> Provider-rejected content won&#39;t succeed on fallback.</li>
+<li><strong>Streaming mid-response failures.</strong> A response 50% streamed before a connection drop can&#39;t be recovered. Fallback kicks in for the next request, not the interrupted one.</li>
+</ul>
+<p>For partial stream failures, handle it in your UI. Detect an abrupt stream end and offer a &quot;Retry&quot; option.</p>
+<h2>Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Time</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Add OpenAI + Anthropic keys to MAIG</td>
+<td>2 min</td>
+<td>Dashboard → Provider Keys</td>
+</tr>
+<tr>
+<td>Create a named route with fallback</td>
+<td>2 min</td>
+<td>Dashboard → Routes → New Route</td>
+</tr>
+<tr>
+<td>Update app to use route name</td>
+<td>1 min</td>
+<td>One-line code change</td>
+</tr>
+</tbody></table>
+<p>Five minutes, one code change, permanent fallback. Your users never see an AI outage again.</p>
+<h2>Get Started</h2>
+<p><a href="https://maig.dev">Free tier at maig.dev</a>. 2,500 requests/month, no credit card required. Add your provider keys, configure a route, and ship a more resilient app.</p>
+
+      </div>
+    </article>
+
+    <aside class="post-cta">
+      <h2>Build AI into your mobile app — free</h2>
+      <p>MAIG gives you a secure AI gateway with native iOS and Android SDKs. Free tier: 2,500 requests/month. No credit card required.</p>
+      <a href="https://maig.dev" class="btn">Get started free</a>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="../docs.html">Docs</a>
+      <a href="../blog/index.html">Blog</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">&copy; 2014–2026 Lucky 13 Technologies, LLC. All rights reserved.</div>
+  </footer>
+  <script src="../assets/nav.js"></script>
+</body>
+</html>
