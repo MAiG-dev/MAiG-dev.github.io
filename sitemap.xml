@@ -56,6 +56,12 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://maig.dev/blog/openai-vs-anthropic-for-mobile-apps.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://maig.dev/blog/ai-provider-downtime-fallback-mobile-apps.html</loc>
     <lastmod>2026-04-23</lastmod>
     <priority>0.7</priority>
